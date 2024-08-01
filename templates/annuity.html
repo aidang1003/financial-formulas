@@ -1,0 +1,84 @@
+{% extends 'base.html' %} {% block title %} Annuities {% endblock%} {% block
+body %}
+<h2>Welcome to the annuities page!</h2>
+<div>
+  <form action="/fvAnnuity" method="POST">
+    <head>
+      Future Value of an Annuity</head
+    ><br /><br />
+    <label for="fPeriodicPayment">Periodic Payment:</label><br />
+    <input
+      type="number"
+      placeholder="1000"
+      id="fPeriodicPayment"
+      name="fPeriodicPayment"
+      required
+    /><br />
+    <label for="fRatePerPeriod">Rate Per Period:</label><br />
+    <input
+      type="number"
+      placeholder=".02"
+      id="fRatePerPeriod"
+      name="fRatePerPeriod"
+      min="0"
+      step=".01"
+      required
+    /><br />
+    <label for="fPeriods">Number of Periods:</label><br />
+    <input
+      type="number"
+      placeholder="5"
+      id="fPeriods"
+      name="fPeriods"
+      min="0"
+      required
+    /><br />
+    <br />
+    <input type="submit" value="submit" />
+    {% if fvAnnuity %}
+    <h3>Future Value of Annuity: {{fvAnnuity}}</h3>
+    {% endif %}
+  </form>
+</div>
+
+<br />
+<div>
+  <form action="/pvAnnuity" method="POST">
+    <head>
+      Present Value of an Annuity</head
+    ><br /><br />
+    <label for="pPeriodicPayment">Periodic Payment:</label><br />
+    <input
+      type="number"
+      placeholder="1000"
+      id="pPeriodicPayment"
+      name="pPeriodicPayment"
+      required
+    /><br />
+    <label for="pRatePerPeriod">Rate Per Period:</label><br />
+    <input
+      type="number"
+      placeholder=".02"
+      id="pRatePerPeriod"
+      name="pRatePerPeriod"
+      min="0"
+      step=".01"
+      required
+    /><br />
+    <label for="pPeriods">Number of Periods:</label><br />
+    <input
+      type="number"
+      placeholder="5"
+      id="pPeriods"
+      name="pPeriods"
+      min="0"
+      required
+    /><br />
+    <br />
+    <input type="submit" value="submit" />
+    {% if pvAnnuity %}
+    <h3>Present Value of Annuity: {{pvAnnuity}}</h3>
+    {% endif %}
+  </form>
+</div>
+{% endblock %}

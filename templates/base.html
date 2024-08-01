@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %} {% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/stylesheet.css') }}">
-</head>
-<body>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/stylesheet.css') }}"
+    />
+  </head>
+  <body>
     <div>
-        <h1>Welcome to Software Design</h1>
-        <hr>
-        <br>
+      <h1>Financial Formulas</h1>
+      <hr />
+      <br />
+      <div>
+        <a href="index">Home</a>
+        <a href="annuity">Annuities</a>
+        <a href="bonds">Bonds</a>
+        <hr />
+        <br />
+      </div>
 
-        {% block body %}
-
-        {% endblock %}
-
+      {% block body %} {% endblock %}
     </div>
-</body>
+  </body>
 </html>
