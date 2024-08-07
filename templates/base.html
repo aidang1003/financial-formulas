@@ -18,17 +18,29 @@
   </head>
   <body>
     <div>
-      <h1>Financial Formulas</h1>
       <hr />
       <br />
-      <div>
-        <a href="index">Home</a>
-        <a href="annuity">Annuities</a>
-        <a href="bonds">Bonds</a>
-        <hr />
-        <br />
+      <div class="container">
+        <header
+          class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom"
+        >
+          <a
+            href="/"
+            class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+          >
+            <span cleass="fs-4">Financial Formulas</span>
+          </a>
+          <ul class="nav nav-pills">
+            <li class="nav-item"><a class="nav-link" href="index">Home</a></li>
+            <li class="nav-item">
+              <a class="nav-link" href="annuity">Annuities</a>
+            </li>
+            <li class="nav-item"><a class="nav-link" href="bonds">Bonds</a></li>
+          </ul>
+        </header>
       </div>
-
+      <hr />
+      <br />
       {% block body %} {% endblock %}
     </div>
   </body>
