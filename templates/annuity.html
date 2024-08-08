@@ -2,10 +2,14 @@
 body %}
 <h2 class="content-header">Welcome to the annuities page!</h2>
 <div class="content">
-  <form action="/fvAnnuity" method="POST">
+  <form action="/Annuity" method="POST">
     <head>
-      Future Value of an Annuity</head
+      Present and Future Values of an Annuity</head
     ><br /><br />
+    <input type="radio" id="pvAnnuity" name="annuity_type" value="pvAnnuity" />
+    <label for="pvAnnuity">Present Value of an Annuity</label><br />
+    <input type="radio" id="fvAnnuity" name="annuity_type" value="fvAnnuity" />
+    <label for="fvAnnuity">Future Value of an Annuity</label><br />
     <label for="fPeriodicPayment">Periodic Payment:</label><br />
     <input
       type="number"
@@ -35,50 +39,13 @@ body %}
     /><br />
     <br />
     <input type="submit" value="submit" />
-    {% if fvAnnuity %}
-    <h3>Future Value of Annuity: {{fvAnnuity}}</h3>
+    {% if annuity %}
+    <h3>Value of Annuity: {{annuity}}</h3>
     {% endif %}
   </form>
 </div>
 
-<br />
-<div class="content">
-  <form action="/pvAnnuity" method="POST">
-    <head>
-      Present Value of an Annuity</head
-    ><br /><br />
-    <label for="pPeriodicPayment">Periodic Payment:</label><br />
-    <input
-      type="number"
-      placeholder="1000"
-      id="pPeriodicPayment"
-      name="pPeriodicPayment"
-      required
-    /><br />
-    <label for="pRatePerPeriod">Rate Per Period:</label><br />
-    <input
-      type="number"
-      placeholder=".02"
-      id="pRatePerPeriod"
-      name="pRatePerPeriod"
-      min="0"
-      step=".01"
-      required
-    /><br />
-    <label for="pPeriods">Number of Periods:</label><br />
-    <input
-      type="number"
-      placeholder="5"
-      id="pPeriods"
-      name="pPeriods"
-      min="0"
-      required
-    /><br />
-    <br />
-    <input type="submit" value="submit" />
-    {% if pvAnnuity %}
-    <h3>Present Value of Annuity: {{pvAnnuity}}</h3>
-    {% endif %}
+
   </form>
 </div>
 {% endblock %}

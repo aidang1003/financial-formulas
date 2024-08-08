@@ -4,16 +4,19 @@ from flask import render_template, request, redirect
 app = Flask(__name__)
 
 class Finance():
-    def __init__(self, periodicPayment, ratePerPeriod, periods):
+    def __init__(self, annuityType, periodicPayment, ratePerPeriod, periods):
+        self.annuityType = annuityType
         self.periodicPayment = periodicPayment
         self.ratePerPeriod = ratePerPeriod
         self.periods = periods        
 
-    def fvAnnuity(self):
-        return f'${round(self.periodicPayment * ((((1+self.ratePerPeriod) ** self.periods) - 1) / self.ratePerPeriod) , 2)}'
-    
-    def pvAnnuity(self):
-        return f'${round(self.periodicPayment * ((1-(1+self.ratePerPeriod) ** (-1 * self.periods)) / self.ratePerPeriod) , 2)}'
+    def annuity(self):
+        if self.annuityType == "fvAnnuity":
+            return f'${round(self.periodicPayment * ((((1+self.ratePerPeriod) ** self.periods) - 1) / self.ratePerPeriod) , 2)}'
+        elif self.annuityType == "pvAnnuity":
+            return f'${round(self.periodicPayment * ((1-(1+self.ratePerPeriod) ** (-1 * self.periods)) / self.ratePerPeriod) , 2)}'
+        else:
+            return "Error in annuity function. Likely there was not a correct annuity type supplied"
 
 
 @app.route('/')
@@ -50,20 +53,21 @@ def fvAnnuity():
 
     return render_template('annuity.html')
 
-@app.route('/pvAnnuity', methods=["GET","POST"])
-def pvAnnuity():
+@app.route('/Annuity', methods=["GET","POST"])
+def processAnnuity():
     
     if request.method == "POST":
         form = request.form
-        pPeriodicPayment = float(form['pPeriodicPayment'])
-        pRatePerPeriod = float(form['pRatePerPeriod'])
-        pPeriods = float(form['pPeriods'])
+        pAnnuity = form['annuity_type']
+        pPeriodicPayment = float(form['fPeriodicPayment'])
+        pRatePerPeriod = float(form['fRatePerPeriod'])
+        pPeriods = float(form['fPeriods'])
 
-        finance = Finance(pPeriodicPayment, pRatePerPeriod, pPeriods)
+        finance = Finance(pAnnuity, pPeriodicPayment, pRatePerPeriod, pPeriods)
         
-        pvAnnuity = finance.pvAnnuity()
+        annuity = finance.annuity()
 
-        return render_template('annuity.html', pvAnnuity=pvAnnuity)
+        return render_template('annuity.html', annuity=annuity)
 
     return render_template('annuity.html')
 
