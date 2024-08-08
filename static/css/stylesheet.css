@@ -1,3 +1,18 @@
-body{
-    background-color: azure;
+body {
+  background-color: rgb(95, 95, 95);
+}
+
+head {
+  background-color: rgb(95, 95, 95);
+}
+
+.content {
+  width: 80%;
+  padding: 2%;
+  flex: auto;
+}
+.content-header {
+  width: 80%;
+  padding: 2%;
+  text-align: center;
 }

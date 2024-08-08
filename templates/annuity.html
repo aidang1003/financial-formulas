@@ -1,7 +1,7 @@
 {% extends 'base.html' %} {% block title %} Annuities {% endblock%} {% block
 body %}
-<h2>Welcome to the annuities page!</h2>
-<div>
+<h2 class="content-header">Welcome to the annuities page!</h2>
+<div class="content">
   <form action="/fvAnnuity" method="POST">
     <head>
       Future Value of an Annuity</head
@@ -42,7 +42,7 @@ body %}
 </div>
 
 <br />
-<div>
+<div class="content">
   <form action="/pvAnnuity" method="POST">
     <head>
       Present Value of an Annuity</head
