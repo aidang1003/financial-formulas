@@ -18,6 +18,17 @@ class Finance():
         else:
             return "Error in annuity function. Likely there was not a correct annuity type supplied"
 
+class Bond():
+    def __init__(self, faceValue, purchasePrice, yearsToMaturity, rateOfYield=.07):
+        self.faceValue = faceValue
+        self.purchasePrice = purchasePrice
+        self.yearsToMaturity = yearsToMaturity
+        self.rateOfYield = rateOfYield
+
+
+    def bondEquivalentYield(self):
+        return f'{round(100 * ((self.faceValue - self.purchasePrice) / self.purchasePrice) * (1 / self.yearsToMaturity), 4)}%'
+
 
 @app.route('/')
 def index():
@@ -36,23 +47,6 @@ def bond():
     return render_template('bond.html')
 
 
-@app.route('/fvAnnuity', methods=["GET","POST"])
-def fvAnnuity():
-    
-    if request.method == "POST":
-        form = request.form
-        fPeriodicPayment = float(form['fPeriodicPayment'])
-        fRatePerPeriod = float(form['fRatePerPeriod'])
-        fPeriods = float(form['fPeriods'])
-
-        finance = Finance(fPeriodicPayment, fRatePerPeriod, fPeriods)
-        
-        fvAnnuity = finance.fvAnnuity()
-
-        return render_template('annuity.html', fvAnnuity=fvAnnuity)
-
-    return render_template('annuity.html')
-
 @app.route('/Annuity', methods=["GET","POST"])
 def processAnnuity():
     
@@ -70,6 +64,23 @@ def processAnnuity():
         return render_template('annuity.html', annuity=annuity)
 
     return render_template('annuity.html')
+
+@app.route('/Bond', methods=["GET","POST"])
+def bondEquivalentYield():
+    
+    if request.method == "POST":
+        form = request.form
+        pFaceValue = float(form['fFaceValue'])
+        pPurchasePrice = float(form['fPurchasePrice'])
+        pYeastoMaturity = float(form['fDaystoMaturity']) / 365
+
+        bond = Bond(pFaceValue, pPurchasePrice, pYeastoMaturity)
+        
+        bondEquivalentYield = bond.bondEquivalentYield()
+
+        return render_template('bond.html', bondEquivalentYield=bondEquivalentYield)
+
+    return render_template('bond.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

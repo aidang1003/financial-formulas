@@ -1,5 +1,48 @@
 {% extends 'base.html' %} {% block title %} Bonds {% endblock %} {% block body
 %}
-<h2 class="content-header">Welcome to the bonds page</h2>
+<h2 class="content-header">Welcome to the bonds page!</h2>
+
+<div class="content">
+  <form action="/Bond" method="POST">
+    <head>
+      Bond Equivalent Yield</head
+    ><br /><br />
+    <label for="FaceValue">Face Value:</label><br />
+    <input
+      type="number"
+      placeholder="1000"
+      id="FaceValue"
+      name="fFaceValue"
+      min="0"
+      step="10"
+      required
+    /><br />
+    <label for="PurchasePrice">Purchase Price:</label><br />
+    <input
+      type="number"
+      placeholder="980"
+      id="PurchasePrice"
+      name="fPurchasePrice"
+      min="0"
+      step="10"
+      required
+    /><br />
+    <label for="DaystoMaturity">Days to Maturity:</label><br />
+    <input
+      type="number"
+      placeholder="60"
+      id="DaystoMaturity"
+      name="fDaystoMaturity"
+      min="0"
+      step="1"
+      required
+    /><br />
+    <br />
+    <input type="submit" value="submit" />
+    {% if bondEquivalentYield %}
+    <h3>Bond Equivalent Yield: {{bondEquivalentYield}}</h3>
+    {% endif %}
+  </form>
+</div>
 
 {% endblock %}
