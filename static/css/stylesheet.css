@@ -1,9 +1,11 @@
 body {
-  background-color: rgb(95, 95, 95);
+  background-color: rgb(192, 180, 180);
+  width: 80%;
+  flex: auto;
 }
 
 head {
-  background-color: rgb(95, 95, 95);
+  background-color: rgb(192, 180, 180);
 }
 
 .content {
@@ -13,6 +15,13 @@ head {
 }
 .content-header {
   width: 80%;
-  padding: 2%;
-  text-align: center;
+  padding-left: 2%;
+  flex: auto;
+}
+
+.form-header {
+  width: 80%;
+  flex: auto;
+  text-align: left;
+  font-size: 24px;
 }
