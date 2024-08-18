@@ -28,6 +28,25 @@ class Bond():
 
     def bondEquivalentYield(self):
         return f'{round(100 * ((self.faceValue - self.purchasePrice) / self.purchasePrice) * (1 / self.yearsToMaturity), 4)}%'
+    
+class Allocation():
+        def __init__(self, minimumPrice, maximumPrice, ethPrice, ethHoldings, factor=2):
+            self.minimumPrice = minimumPrice
+            self.maximumPrice = maximumPrice
+            self.ethPrice = ethPrice
+            self.ethHoldings = ethHoldings
+            self.factor = factor
+
+
+        def formattingValue(self):
+            # Calculates an "a" value so each input returns an output in percentage
+            # adding in x and y offset values later
+            return 1 / (self.maximumPrice ** self.factor)
+        
+        def usdAllocation(self):
+            a = self.formattingValue()
+            return f'{round(100 * a * (self.ethPrice ** self.factor),4)}%'
+
 
 
 @app.route('/')
@@ -42,12 +61,33 @@ def home():
 def annuity():
     return render_template('annuity.html')
 
-@app.route('/bonds')
+@app.route('/bond')
 def bond():
     return render_template('bond.html')
 
+@app.route('/allocation')
+def allocation():
+    return render_template('allocation.html')
 
-@app.route('/Annuity', methods=["GET","POST"])
+@app.route('/allocation', methods=["GET","POST"])
+def allocationPercentage():
+    
+    if request.method == "POST":
+        form = request.form
+        pMinimumPrice = float(form['fMinimumPrice'])
+        pMaximumPrice = float(form['fMaximumPrice'])
+        pEthPrice = float(form['fEthPrice'])
+        pEthHoldings = float(form['fEthHoldings'])
+
+        allocation = Allocation(pMinimumPrice, pMaximumPrice, pEthPrice, pEthHoldings)
+        
+        usdAllocation = allocation.usdAllocation()
+
+        return render_template('allocation.html', usdAllocation=usdAllocation)
+
+    return render_template('allocation.html')
+
+@app.route('/annuity', methods=["GET","POST"])
 def processAnnuity():
     
     if request.method == "POST":
@@ -65,7 +105,7 @@ def processAnnuity():
 
     return render_template('annuity.html')
 
-@app.route('/Bond', methods=["GET","POST"])
+@app.route('/bond', methods=["GET","POST"])
 def bondEquivalentYield():
     
     if request.method == "POST":

@@ -1,0 +1,65 @@
+{% extends 'base.html' %} {% block title %} Ether Allocation {% endblock %} {%
+block body %}
+<div class="content-header">
+  <h2 class="form-header">Welcome to the Ether allocation page!</h2>
+</div>
+
+<div class="content">
+  <form action="/allocation" method="POST">
+    <head>
+      USD Allocation give an Eth price</head
+    ><br /><br />
+    <label for="MinimumPrice">Minimum Price:</label><br />
+    <input
+      type="number"
+      placeholder="1000"
+      value="0"
+      id="MinimumPrice"
+      name="fMinimumPrice"
+      min="0"
+      step="10"
+      required
+    /><br />
+    <label for="MaximumPrice">Maximum Price:</label><br />
+    <input
+      type="number"
+      placeholder="15000"
+      value="15000"
+      id="MaximumPrice"
+      name="fMaximumPrice"
+      min="0"
+      step="1"
+      required
+    /><br />
+    <label for="EthPrice">Eth Price:</label><br />
+    <input
+      type="number"
+      placeholder="3600"
+      value="3600"
+      id="EthPrice"
+      name="fEthPrice"
+      min="0"
+      step="1"
+      required
+    /><br />
+    <label for="EthHoldings">Eth Holdings (in ethereum):</label><br />
+    <input
+      type="number"
+      placeholder="5"
+      value="5"
+      id="EthHoldings"
+      name="fEthHoldings"
+      min="0"
+      step=".0001"
+      required
+    /><br />
+    <br />
+    <input type="submit" value="submit" />
+    {% if usdAllocation %}
+    <h4>USD Allocation Percentage: {{usdAllocation}}</h4>
+    {% endif %}
+  </form>
+</div>
+<body>
+  {% endblock %}
+</body>
