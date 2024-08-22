@@ -23,40 +23,78 @@ block body %}
     <label for="MaximumPrice">Maximum Price:</label><br />
     <input
       type="number"
-      placeholder="15000"
-      value="15000"
+      placeholder="13000"
+      value="13000"
       id="MaximumPrice"
       name="fMaximumPrice"
       min="0"
       step="1"
       required
     /><br />
-    <label for="EthPrice">Eth Price:</label><br />
+    <label for="UsdHoldings">USD Holdings (in dollars):</label><br />
     <input
       type="number"
-      placeholder="3600"
-      value="3600"
-      id="EthPrice"
-      name="fEthPrice"
+      placeholder="5181"
+      value="764"
+      id="UsdHoldings"
+      name="fUsdHoldings"
       min="0"
       step="1"
+      required
+    /><br />
+    <label for="stEthHoldings">stEth Holdings (in ethereum):</label><br />
+    <input
+      type="number"
+      placeholder="1.01143"
+      value="1.01143"
+      id="stEthHoldings"
+      name="fstEthHoldings"
+      min="0"
+      step=".00001"
+      required
+    /><br />
+    <label for="rEthHoldings">rEth Holdings (in ethereum):</label><br />
+    <input
+      type="number"
+      placeholder="1.35855"
+      value="1.35855"
+      id="rEthHoldings"
+      name="frEthHoldings"
+      min="0"
+      step=".00001"
+      required
+    /><br />
+    <label for="swEthHoldings">swEth Holdings (in ethereum):</label><br />
+    <input
+      type="number"
+      placeholder="1.84304"
+      value="1.84304"
+      id="swEthHoldings"
+      name="fswEthHoldings"
+      min="0"
+      step=".00001"
       required
     /><br />
     <label for="EthHoldings">Eth Holdings (in ethereum):</label><br />
     <input
       type="number"
-      placeholder="5"
-      value="5"
+      placeholder="2.61"
+      value="2.61"
       id="EthHoldings"
       name="fEthHoldings"
       min="0"
-      step=".0001"
+      step=".00001"
       required
     /><br />
+    <h3>Total Eth: {{pTotalEthHoldings}}<h3>
+    <br />
     <br />
     <input type="submit" value="submit" />
     {% if usdAllocation %}
-    <h4>USD Allocation Percentage: {{usdAllocation}}</h4>
+    <h4>Current USD Allocation Percentage: {{currentUsdAllocation}}</h4>
+    <h4>Current ETH Allocation Percentage: {{currentEthAllocation}}</h4>
+    <h4>Desired USD Allocation Percentage: {{usdAllocation}}</h4>
+    <h4>Desired ETH Allocation Percentage: {{ethAllocation}}</h4>
     {% endif %}
   </form>
 </div>

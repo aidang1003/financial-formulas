@@ -30,11 +30,12 @@ class Bond():
         return f'{round(100 * ((self.faceValue - self.purchasePrice) / self.purchasePrice) * (1 / self.yearsToMaturity), 4)}%'
     
 class Allocation():
-        def __init__(self, minimumPrice, maximumPrice, ethPrice, ethHoldings, factor=2):
+        def __init__(self, minimumPrice, maximumPrice, ethHoldings, usdHoldings, factor=2):
             self.minimumPrice = minimumPrice
             self.maximumPrice = maximumPrice
-            self.ethPrice = ethPrice
-            self.ethHoldings = ethHoldings
+            self.ethPrice = 2100
+            self.ethHoldings = ethHoldings * self.ethPrice
+            self.usdHoldings = usdHoldings
             self.factor = factor
 
 
@@ -45,7 +46,20 @@ class Allocation():
         
         def usdAllocation(self):
             a = self.formattingValue()
-            return f'{round(100 * a * (self.ethPrice ** self.factor),4)}%'
+            self.usdAllocationPercentage = a * (self.ethPrice ** self.factor)
+            return f'{round(100 * self.usdAllocationPercentage,3)}%'
+        
+        def ethAllocation(self):
+            self.ethAllocationPercentage = 1 - self.usdAllocationPercentage
+            return f'{round(100 * self.ethAllocationPercentage,3)}%'
+                        
+        def currentUsdAllocation(self):
+            a = 100 * (self.usdHoldings / (self.ethHoldings + self.usdHoldings))
+            return f'{round(a,3)}%'
+
+        def currentEthAllocation(self):
+            a = 100 * (self.ethHoldings / (self.ethHoldings + self.usdHoldings))
+            return f'{round(a,3)}%'
 
 
 
@@ -76,14 +90,24 @@ def allocationPercentage():
         form = request.form
         pMinimumPrice = float(form['fMinimumPrice'])
         pMaximumPrice = float(form['fMaximumPrice'])
-        pEthPrice = float(form['fEthPrice'])
+        # USD holdings
+        pUsdHoldings = float(form['fUsdHoldings'])
+        # Eth holdings
+        pstEthHoldings = float(form['fstEthHoldings'])
+        prEthHoldings = float(form['frEthHoldings'])
+        pswEthHoldings = float(form['fswEthHoldings'])
         pEthHoldings = float(form['fEthHoldings'])
 
-        allocation = Allocation(pMinimumPrice, pMaximumPrice, pEthPrice, pEthHoldings)
+        pTotalEthHoldings = pstEthHoldings + prEthHoldings + pswEthHoldings + pEthHoldings # placeholder values until integrated with CMC or Chainlink
+
+        allocation = Allocation(pMinimumPrice, pMaximumPrice, pTotalEthHoldings, pUsdHoldings)
         
         usdAllocation = allocation.usdAllocation()
+        ethAllocation = allocation.ethAllocation()
+        currentUsdAllocation = allocation.currentUsdAllocation()
+        currentEthAllocation = allocation.currentEthAllocation()
 
-        return render_template('allocation.html', usdAllocation=usdAllocation)
+        return render_template('allocation.html', pTotalEthHoldings=pTotalEthHoldings,usdAllocation=usdAllocation, ethAllocation=ethAllocation, currentEthAllocation=currentEthAllocation, currentUsdAllocation=currentUsdAllocation)
 
     return render_template('allocation.html')
 
