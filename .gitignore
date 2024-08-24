@@ -13,3 +13,6 @@ __pycache__/
 *$py.class
 
 *.xlsx
+
+#Key storage
+.env

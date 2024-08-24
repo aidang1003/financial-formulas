@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template, request, redirect
+from liveprice import PriceData
 
 app = Flask(__name__)
 
