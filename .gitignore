@@ -16,3 +16,6 @@ __pycache__/
 
 #Key storage
 .env
+
+#Temp data file for formatting
+data.py
