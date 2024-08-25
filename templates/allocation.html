@@ -90,7 +90,7 @@ block body %}
     <br />
     <br />
     <input type="submit" value="submit" />
-    {% if usdAllocation %}
+    {% if currentUsdAllocation and currentEthAllocation and usdAllocation and ethAllocation%}
     <h4>Current USD Allocation Percentage: {{currentUsdAllocation}}</h4>
     <h4>Current ETH Allocation Percentage: {{currentEthAllocation}}</h4>
     <h4>Desired USD Allocation Percentage: {{usdAllocation}}</h4>

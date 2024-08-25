@@ -56,11 +56,24 @@ class PriceData():
         self.swEthPrice = self.data['data']['25147']['quote']['USD']['price']
         return
     
+    def getEthPrice(self):
+        return self.ethPrice
+    
+    def getStEthPrice(self):
+        return self.stEthPrice
+    
+    def getREthPrice(self):
+        return self.rEthPrice
+    
+    def getSwEthPrice(self):
+        return self.swEthPrice
+    
 
 
 priceData = PriceData()
 print(priceData)
 priceData.getPrice()
-print(priceData)
+print(priceData.getEthPrice())
+#print(priceData)
 
   
