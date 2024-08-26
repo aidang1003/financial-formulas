@@ -62,19 +62,31 @@ class Allocation():
         def usdAllocation(self):
             a = self.formattingValue()
             self.usdAllocationPercentage = a * (self.ethPrice ** self.factor) #self.eth price needs to become a weighted average?
-            return f'{round(100 * self.usdAllocationPercentage,3)}%'
+            result = 100 * self.usdAllocationPercentage
+            return f'{round(result,3)}%'
         
         def ethAllocation(self):
             self.ethAllocationPercentage = 1 - self.usdAllocationPercentage
-            return f'{round(100 * self.ethAllocationPercentage,3)}%'
+            reuslt = 100 * self.ethAllocationPercentage
+            return f'{round(reuslt,3)}%'
                         
         def currentUsdAllocation(self):
-            a = 100 * (self.usdHoldings / (self.ethHoldings + self.usdHoldings))
-            return f'{round(a,3)}%'
+            self.currentUsdAllocationPercentage = (self.usdHoldings / (self.totalEthHoldingsInUsd + self.usdHoldings))
+            result = 100 * self.currentUsdAllocationPercentage
+            return f'{round(result,3)}%'
 
         def currentEthAllocation(self):
-            a = 100 * (self.ethHoldings / (self.ethHoldings + self.usdHoldings))
-            return f'{round(a,3)}%'
+            self.currentEthAllocationPercentage  = (self.totalEthHoldingsInUsd / (self.totalEthHoldingsInUsd + self.usdHoldings))
+            result = 100 * self.currentEthAllocationPercentage
+            return f'{round(result ,3)}%'
+        
+        def getEthHoldingsInEth(self):
+            return self.totalEthHoldingsInUsd / self.ethPrice
+        
+        def transferAmount(self):
+            difference = self.currentUsdAllocationPercentage - self.usdAllocationPercentage
+            differenceInUsd = difference * (self.totalEthHoldingsInUsd + self.usdHoldings)
+            return f'${round(abs(differenceInUsd),2)}'
 
 
 
@@ -116,12 +128,18 @@ def allocationPercentage():
 
         allocation = Allocation(pMinimumPrice,pMaximumPrice,pEthHoldings,pstEthHoldings,prEthHoldings,pswEthHoldings,pUsdHoldings)
         
+        totalEthHoldingsInEth = allocation.getEthHoldingsInEth()
+        
         usdAllocation = allocation.usdAllocation()
         ethAllocation = allocation.ethAllocation()
         currentUsdAllocation = allocation.currentUsdAllocation()
         currentEthAllocation = allocation.currentEthAllocation()
 
-        return render_template('allocation.html',usdAllocation=usdAllocation, ethAllocation=ethAllocation, currentEthAllocation=currentEthAllocation, currentUsdAllocation=currentUsdAllocation)
+        transferAmount = allocation.transferAmount()
+
+        return render_template('allocation.html',totalEthHoldingsInEth=totalEthHoldingsInEth,
+            usdAllocation=usdAllocation, ethAllocation=ethAllocation,currentEthAllocation=currentEthAllocation,
+            currentUsdAllocation=currentUsdAllocation, transferAmount=transferAmount)
 
     return render_template('allocation.html')
 

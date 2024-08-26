@@ -34,15 +34,15 @@ block body %}
     <label for="UsdHoldings">USD Holdings (in dollars):</label><br />
     <input
       type="number"
-      placeholder="5181"
-      value="764"
+      placeholder="1050"
+      value="1050"
       id="UsdHoldings"
       name="fUsdHoldings"
       min="0"
       step="1"
       required
     /><br />
-    <label for="stEthHoldings">stEth Holdings (in ethereum):</label><br />
+    <label for="stEthHoldings">stEth Holdings (in eth):</label><br />
     <input
       type="number"
       placeholder="1.01143"
@@ -53,7 +53,7 @@ block body %}
       step=".00001"
       required
     /><br />
-    <label for="rEthHoldings">rEth Holdings (in ethereum):</label><br />
+    <label for="rEthHoldings">rEth Holdings (in eth):</label><br />
     <input
       type="number"
       placeholder="1.35855"
@@ -64,7 +64,7 @@ block body %}
       step=".00001"
       required
     /><br />
-    <label for="swEthHoldings">swEth Holdings (in ethereum):</label><br />
+    <label for="swEthHoldings">swEth Holdings (in eth):</label><br />
     <input
       type="number"
       placeholder="1.84304"
@@ -75,7 +75,7 @@ block body %}
       step=".00001"
       required
     /><br />
-    <label for="EthHoldings">Eth Holdings (in ethereum):</label><br />
+    <label for="EthHoldings">Eth Holdings (in eth):</label><br />
     <input
       type="number"
       placeholder="2.61"
@@ -86,15 +86,23 @@ block body %}
       step=".00001"
       required
     /><br />
-    <h3>Total Eth: {{pTotalEthHoldings}}<h3>
+    {% if totalEthHoldingsInEth %}
+    <h3>Total Eth: {{totalEthHoldingsInEth}}<h3>
+    {% endif %}
     <br />
     <br />
     <input type="submit" value="submit" />
-    {% if currentUsdAllocation and currentEthAllocation and usdAllocation and ethAllocation%}
+    {% if currentUsdAllocation and currentEthAllocation and usdAllocation and ethAllocation %}
     <h4>Current USD Allocation Percentage: {{currentUsdAllocation}}</h4>
     <h4>Current ETH Allocation Percentage: {{currentEthAllocation}}</h4>
     <h4>Desired USD Allocation Percentage: {{usdAllocation}}</h4>
     <h4>Desired ETH Allocation Percentage: {{ethAllocation}}</h4>
+      {% if currentUsdAllocation > usdAllocation%}
+      <h4>Convert {{transferAmount}} to Eth</h4>
+      {% endif %}
+      {% if currentUsdAllocation < usdAllocation%}
+      <h4>Convert {{transferAmount}} in ETH to USD</h4>
+      {% endif %}
     {% endif %}
   </form>
 </div>
