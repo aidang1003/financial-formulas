@@ -17,9 +17,24 @@ head {
   flex: auto;
 }
 
+.content-centered{
+  width: 80%;
+  text-align: center;
+}
+
 .form-header {
   width: 80%;
   flex: auto;
   text-align: left;
   font-size: 24px;
+}
+
+.column {
+  width: 49%; /* adjust the width as needed */
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+.slidecontainer {
+  width: 100%; /* Width of the outside container */
 }

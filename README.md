@@ -43,3 +43,11 @@ Basic structure for starting a Flask project with Jinja templates
 List dependencies: `pip list`
 
 Add dependencies to the requirements.txt: `pip freeze > requirements.txt`
+
+# Manage CoinMarketCap API
+
+1. Create an API key at https://coinmarketcap.com/api/
+
+2. Create a .env file in the ..\financial-formulas folder
+
+3. Copy this text to your .env file ```COIN_MARKETCAP_API_KEY = **YOUR API KEY HERE** ```

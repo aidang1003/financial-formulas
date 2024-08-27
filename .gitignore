@@ -12,6 +12,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#Excel files containing data
 *.xlsx
 
 #Key storage
