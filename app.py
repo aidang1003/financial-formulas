@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, session
 from flask import render_template, request, redirect
 from liveprice import PriceData
 
@@ -104,7 +104,8 @@ def annuity():
 
 @app.route('/bond')
 def bond():
-    return render_template('bond.html')
+    session["pFaceValue"] = 1000
+    return render_template('bond.html', UserInput=UserInput)
 
 @app.route('/allocation')
 def allocation():
@@ -137,10 +138,13 @@ def allocationPercentage():
 
         transferAmount = allocation.transferAmount()
 
+        #session['fUserInput'] = {'pMinimumPrice' : pMinimumPrice}
+
         return render_template('allocation.html',totalEthHoldingsInEth=totalEthHoldingsInEth,
             usdAllocation=usdAllocation, ethAllocation=ethAllocation,currentEthAllocation=currentEthAllocation,
             currentUsdAllocation=currentUsdAllocation, transferAmount=transferAmount)
-
+    
+    #session['fUserInput'] = {'pMinimumPrice' : pMinimumPrice}
     return render_template('allocation.html')
 
 @app.route('/annuity', methods=["GET","POST"])
@@ -163,7 +167,6 @@ def processAnnuity():
 
 @app.route('/bond', methods=["GET","POST"])
 def bondEquivalentYield():
-    
     if request.method == "POST":
         form = request.form
         pFaceValue = float(form['fFaceValue'])
@@ -173,10 +176,13 @@ def bondEquivalentYield():
         bond = Bond(pFaceValue, pPurchasePrice, pYeastoMaturity)
         
         bondEquivalentYield = bond.bondEquivalentYield()
+        session['bondEquivalentYield'] = bondEquivalentYield
 
-        return render_template('bond.html', bondEquivalentYield=bondEquivalentYield)
+        return render_template('bond.html', bondEquivalentYield=bondEquivalentYield, session=session)
 
-    return render_template('bond.html')
+    
+
+    return render_template('bond.html', session=session)
 
 if __name__ == '__main__':
     app.run(debug=True)
