@@ -23,6 +23,7 @@
     <label for="PurchasePrice">Purchase Price:</label><br />
     <input
       type="number"
+      value="{{session.pPurchasePrice}}"
       placeholder="980"
       id="PurchasePrice"
       name="fPurchasePrice"
@@ -33,6 +34,7 @@
     <label for="DaystoMaturity">Days to Maturity:</label><br />
     <input
       type="number"
+      value="{{session.pDaystoMaturity}}"
       placeholder="60"
       id="DaystoMaturity"
       name="fDaystoMaturity"
@@ -42,8 +44,8 @@
     /><br />
     <br />
     <input type="submit" value="submit" />
-    {% if bondEquivalentYield %}
-    <h4>Bond Equivalent Yield: {{bondEquivalentYield}}</h4>
+    {% if session.bondEquivalentYield %}
+    <h4>Bond Equivalent Yield: {{session.bondEquivalentYield}}</h4>
     {% endif %}
   </form>
 </div>

@@ -1,8 +1,12 @@
 from flask import Flask, session
 from flask import render_template, request, redirect
 from liveprice import PriceData
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
+
+app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY') #set a secret key to use for session instance
 
 class Finance():
     def __init__(self, annuityType, periodicPayment, ratePerPeriod, periods):
@@ -104,8 +108,10 @@ def annuity():
 
 @app.route('/bond')
 def bond():
-    session["pFaceValue"] = 1000
-    return render_template('bond.html', UserInput=UserInput)
+    session["pFaceValue"] = 0
+    session["pPurchasePrice"] = 0
+    session["pDaystoMaturity"] = 0
+    return render_template('bond.html', session=session)
 
 @app.route('/allocation')
 def allocation():
@@ -169,18 +175,17 @@ def processAnnuity():
 def bondEquivalentYield():
     if request.method == "POST":
         form = request.form
-        pFaceValue = float(form['fFaceValue'])
-        pPurchasePrice = float(form['fPurchasePrice'])
-        pYeastoMaturity = float(form['fDaystoMaturity']) / 365
+        session["pFaceValue"] = float(form['fFaceValue'])
+        session["pPurchasePrice"] = float(form['fPurchasePrice'])
+        session["pDaystoMaturity"] = float(form['fDaystoMaturity'])
 
-        bond = Bond(pFaceValue, pPurchasePrice, pYeastoMaturity)
-        
-        bondEquivalentYield = bond.bondEquivalentYield()
-        session['bondEquivalentYield'] = bondEquivalentYield
+        session["pYeastoMaturity"] = session["pDaystoMaturity"] / 365
 
-        return render_template('bond.html', bondEquivalentYield=bondEquivalentYield, session=session)
+        bond = Bond(session["pFaceValue"], session["pPurchasePrice"], session["pYeastoMaturity"])
+         
+        session['bondEquivalentYield'] = bond.bondEquivalentYield()
 
-    
+        return render_template('bond.html', session=session)
 
     return render_template('bond.html', session=session)
 
