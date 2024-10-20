@@ -165,7 +165,7 @@ def processAnnuity():
 
     return render_template('annuity.html')
 
-@app.route('/bond', methods=["GET","POST"])
+@app.route('/bond', methods=["GET","POST"])  # Create a working session dictionary to manage all variables on this page
 def bondEquivalentYield():
     if request.method == "POST":
         form = request.form
