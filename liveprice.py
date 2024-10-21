@@ -67,13 +67,3 @@ class PriceData():
     
     def getSwEthPrice(self):
         return self.swEthPrice
-    
-
-
-priceData = PriceData()
-print(priceData)
-priceData.getPrice()
-print(priceData.getEthPrice())
-#print(priceData)
-
-  

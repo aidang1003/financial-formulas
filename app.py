@@ -115,6 +115,13 @@ def bond():
 
 @app.route('/allocation')
 def allocation():
+    session['pMinimumPrice'] = 0
+    session['pMaximumPrice'] = 12500
+    session['pUsdHoldings'] = 1000
+    session['pEthHoldings'] = 10
+    session['pstEthHoldings'] = 10
+    session['prEthHoldings'] = 10
+    session['pswEthHoldings'] = 10
     return render_template('allocation.html')
 
 @app.route('/allocation', methods=["GET","POST"])
@@ -122,18 +129,28 @@ def allocationPercentage():
     
     if request.method == "POST":
         form = request.form
-        pMinimumPrice = float(form['fMinimumPrice'])
-        pMaximumPrice = float(form['fMaximumPrice'])
+        session['pMinimumPrice'] = float(form['fMinimumPrice'])
+        session['pMaximumPrice'] = float(form['fMaximumPrice'])
         # USD holdings
-        pUsdHoldings = float(form['fUsdHoldings'])
+        session['pUsdHoldings'] = float(form['fUsdHoldings'])
         # Eth holdings
-        pEthHoldings = float(form['fEthHoldings'])
-        pstEthHoldings = float(form['fstEthHoldings'])
-        prEthHoldings = float(form['frEthHoldings'])
-        pswEthHoldings = float(form['fswEthHoldings'])
+        session['pEthHoldings'] = float(form['fEthHoldings'])
+        session['pstEthHoldings'] = float(form['fstEthHoldings'])
+        session['prEthHoldings'] = float(form['frEthHoldings'])
+        session['pswEthHoldings'] = float(form['fswEthHoldings'])
+
+        if 1==0: #Used for debugging, comment this out for the page to run normally
+            session['pUsdHoldings'] = float(os.getenv('COINBASE_USD_HOLDINGS')) + float(os.getenv('GMX_USD_HOLDINGS'))
+            session['pEthHoldings'] = float(os.getenv('ETH_HOLDINGS')) + float(os.getenv('GMX_WETH_HOLDINGS'))
+            session['pstEthHoldings'] = float(os.getenv('STETH_HOLDINGS'))
+            session['prEthHoldings'] = float(os.getenv('RETH_HOLDINGS'))
+            session['pswEthHoldings'] = float(os.getenv('SWETH_HOLDINGS'))
+            print(type(session['pEthHoldings']))
+            print("ether >>", session['pEthHoldings'])
 
 
-        allocation = Allocation(pMinimumPrice,pMaximumPrice,pEthHoldings,pstEthHoldings,prEthHoldings,pswEthHoldings,pUsdHoldings)
+
+        allocation = Allocation(session['pMinimumPrice'],session['pMaximumPrice'],session['pEthHoldings'],session['pstEthHoldings'],session['prEthHoldings'],session['pswEthHoldings'],session['pUsdHoldings'])
         
         totalEthHoldingsInEth = allocation.getEthHoldingsInEth()
         
@@ -190,4 +207,5 @@ def bondEquivalentYield():
     return render_template('bond.html', session=session)
 
 if __name__ == '__main__':
+    load_dotenv()
     app.run(debug=True)
