@@ -24,15 +24,43 @@ class Finance():
             return "Error in annuity function. Likely there was not a correct annuity type supplied"
 
 class Bond():
-    def __init__(self, faceValue, purchasePrice, yearsToMaturity, rateOfYield=.07):
-        self.faceValue = faceValue
-        self.purchasePrice = purchasePrice
-        self.yearsToMaturity = yearsToMaturity
+    def __init__(self, arrData, rateOfYield=.07):
+        self.faceValue = arrData['faceValue']
+        self.purchasePrice = arrData['purchasePrice']
+        self.yearsToMaturity = arrData['yearsToMaturity']
         self.rateOfYield = rateOfYield
 
 
     def bondEquivalentYield(self):
         return f'{round(100 * ((self.faceValue - self.purchasePrice) / self.purchasePrice) * (1 / self.yearsToMaturity), 4)}%'
+    
+@app.route('/bond')
+def bond():
+    if session["faceValue"] in session:
+        print("don't go here")
+        session["faceValue"] = None
+    if session["faceValue"] in session:
+        session["purchasePrice"] = None
+    if session["faceValue"] in session:
+        session["daysToMaturity"] = None
+    return render_template('bond.html', session=session)
+
+
+@app.route('/bond', methods=["GET","POST"])
+def bondEquivalentYield():
+    if request.method == "POST":
+        form = request.form
+        session["faceValue"] = float(form['FaceValue'])
+        session["purchasePrice"] = float(form['PurchasePrice'])
+        session["daysToMaturity"] = float(form['DaysToMaturity'])
+
+        session["yearsToMaturity"] = session["daysToMaturity"] / 365
+
+        bond = Bond(session) # Feed in the session variable instead of each individual variable
+         
+        session['bondEquivalentYield'] = bond.bondEquivalentYield()
+
+    return render_template('bond.html', session=session)
     
 class Allocation():
         def __init__(self, minimumPrice, maximumPrice, ethAmount, stEthAmount, rEthAmount, swEthAmount, usdHoldings, factor=2):
@@ -96,22 +124,17 @@ class Allocation():
 
 @app.route('/')
 def index():
-    return render_template('index.html', pageTitle='Homepage')
+    return render_template('index.html', pageTitle='Homepage', session=session)
 
 @app.route('/index')
 def home():
-    return render_template('index.html')
+    return render_template('index.html', session=session)
 
 @app.route('/annuity')
 def annuity():
-    return render_template('annuity.html')
+    return render_template('annuity.html', session=session)
 
-@app.route('/bond')
-def bond():
-    session["pFaceValue"] = 0
-    session["pPurchasePrice"] = 0
-    session["pDaystoMaturity"] = 0
-    return render_template('bond.html', session=session)
+
 
 @app.route('/allocation')
 def allocation():
@@ -122,7 +145,7 @@ def allocation():
     session['pstEthHoldings'] = 10
     session['prEthHoldings'] = 10
     session['pswEthHoldings'] = 10
-    return render_template('allocation.html')
+    return render_template('allocation.html', session=session)
 
 @app.route('/allocation', methods=["GET","POST"])
 def allocationPercentage():
@@ -161,14 +184,11 @@ def allocationPercentage():
 
         transferAmount = allocation.transferAmount()
 
-        #session['fUserInput'] = {'pMinimumPrice' : pMinimumPrice}
-
         return render_template('allocation.html',totalEthHoldingsInEth=totalEthHoldingsInEth,
             usdAllocation=usdAllocation, ethAllocation=ethAllocation,currentEthAllocation=currentEthAllocation,
-            currentUsdAllocation=currentUsdAllocation, transferAmount=transferAmount)
+            currentUsdAllocation=currentUsdAllocation, transferAmount=transferAmount, session=session)
     
-    #session['fUserInput'] = {'pMinimumPrice' : pMinimumPrice}
-    return render_template('allocation.html')
+    return render_template('allocation.html', session=session)
 
 @app.route('/annuity', methods=["GET","POST"])
 def processAnnuity():
@@ -184,27 +204,9 @@ def processAnnuity():
         
         annuity = finance.annuity()
 
-        return render_template('annuity.html', annuity=annuity)
+        return render_template('annuity.html', annuity=annuity, session=session)
 
-    return render_template('annuity.html')
-
-@app.route('/bond', methods=["GET","POST"])  # Create a working session dictionary to manage all variables on this page
-def bondEquivalentYield():
-    if request.method == "POST":
-        form = request.form
-        session["pFaceValue"] = float(form['fFaceValue'])
-        session["pPurchasePrice"] = float(form['fPurchasePrice'])
-        session["pDaystoMaturity"] = float(form['fDaystoMaturity'])
-
-        session["pYeastoMaturity"] = session["pDaystoMaturity"] / 365
-
-        bond = Bond(session["pFaceValue"], session["pPurchasePrice"], session["pYeastoMaturity"])
-         
-        session['bondEquivalentYield'] = bond.bondEquivalentYield()
-
-        return render_template('bond.html', session=session)
-
-    return render_template('bond.html', session=session)
+    return render_template('annuity.html', session=session)
 
 if __name__ == '__main__':
     load_dotenv()
