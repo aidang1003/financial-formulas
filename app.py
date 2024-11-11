@@ -36,7 +36,7 @@ class Bond():
     
 @app.route('/bond')
 def bond():
-    if session["faceValue"] in session:
+    if not "faceValue" in session.keys():
         print("don't go here")
         session["faceValue"] = None
     if session["faceValue"] in session:
@@ -63,10 +63,11 @@ def bondEquivalentYield():
     return render_template('bond.html', session=session)
     
 class Allocation():
-        def __init__(self, minimumPrice, maximumPrice, ethAmount, stEthAmount, rEthAmount, swEthAmount, usdHoldings, factor=2):
+        #def __init__(self, minimumPrice, maximumPrice, ethAmount, stEthAmount, rEthAmount, swEthAmount, usdHoldings, factor=2):
+        def __init__(self, arrData, factor=2):
             # Eth min and max anticipated range
-            self.minimumPrice = minimumPrice
-            self.maximumPrice = maximumPrice
+            self.minimumPrice = session['pMinimumPrice']
+            self.maximumPrice = session['pMaximumPrice']
 
             # Return Eth price data from Coin Marketcap
             priceData = PriceData()
@@ -77,12 +78,12 @@ class Allocation():
             self.swEthPrice = priceData.getSwEthPrice()
 
             # Calculations
-            self.ethHoldings = ethAmount * self.ethPrice
-            self.stEthHoldings = stEthAmount * self.stEthPrice
-            self.rEthHoldings = rEthAmount * self.rEthPrice
-            self.swEthHoldings = swEthAmount * self.swEthPrice
+            self.ethHoldings = session['pEthHoldings'] * self.ethPrice
+            self.stEthHoldings = session['pstEthHoldings'] * self.stEthPrice
+            self.rEthHoldings = session['prEthHoldings'] * self.rEthPrice
+            self.swEthHoldings = session['pswEthHoldings'] * self.swEthPrice
             self.totalEthHoldingsInUsd = self.ethHoldings + self.stEthHoldings + self.rEthHoldings +  self.swEthHoldings
-            self.usdHoldings = usdHoldings
+            self.usdHoldings = session['pUsdHoldings']
             self.factor = factor
 
 
@@ -90,35 +91,35 @@ class Allocation():
             # Calculates an "a" value so each input returns an output in percentage
             # adding in x and y offset values later
             return 1 / (self.maximumPrice ** self.factor)
-        
-        def usdAllocation(self):
-            a = self.formattingValue()
-            self.usdAllocationPercentage = a * (self.ethPrice ** self.factor) #self.eth price needs to become a weighted average?
-            result = 100 * self.usdAllocationPercentage
-            return f'{round(result,3)}%'
-        
-        def ethAllocation(self):
-            self.ethAllocationPercentage = 1 - self.usdAllocationPercentage
-            reuslt = 100 * self.ethAllocationPercentage
-            return f'{round(reuslt,3)}%'
                         
-        def currentUsdAllocation(self):
-            self.currentUsdAllocationPercentage = (self.usdHoldings / (self.totalEthHoldingsInUsd + self.usdHoldings))
-            result = 100 * self.currentUsdAllocationPercentage
-            return f'{round(result,3)}%'
+        def currentPerUsdAllocation(self):
+            self.currentPerUsdAllocation = (self.usdHoldings / (self.totalEthHoldingsInUsd + self.usdHoldings))
+            result = 100 * self.currentPerUsdAllocation
+            return round(result,3)
 
         def currentEthAllocation(self):
             self.currentEthAllocationPercentage  = (self.totalEthHoldingsInUsd / (self.totalEthHoldingsInUsd + self.usdHoldings))
             result = 100 * self.currentEthAllocationPercentage
-            return f'{round(result ,3)}%'
+            return round(result,3)
+        
+        def desiredUsdAllocation(self):
+            a = self.formattingValue()
+            self.desiredUsdAllocation = a * (self.ethPrice ** self.factor) #self.eth price needs to become a weighted average?
+            result = 100 * self.desiredUsdAllocation
+            return round(result,3)
+        
+        def desiredEthAllocation(self):
+            self.desiredEthAllocation = 1 - self.desiredUsdAllocation
+            result = 100 * self.desiredEthAllocation
+            return round(result,3)
         
         def getEthHoldingsInEth(self):
             return self.totalEthHoldingsInUsd / self.ethPrice
         
         def transferAmount(self):
-            difference = self.currentUsdAllocationPercentage - self.usdAllocationPercentage
+            difference = self.currentPerUsdAllocation - self.desiredUsdAllocation
             differenceInUsd = difference * (self.totalEthHoldingsInUsd + self.usdHoldings)
-            return f'${round(abs(differenceInUsd),2)}'
+            return round(differenceInUsd,2)
 
 
 
@@ -168,25 +169,22 @@ def allocationPercentage():
             session['pstEthHoldings'] = float(os.getenv('STETH_HOLDINGS'))
             session['prEthHoldings'] = float(os.getenv('RETH_HOLDINGS'))
             session['pswEthHoldings'] = float(os.getenv('SWETH_HOLDINGS'))
-            print(type(session['pEthHoldings']))
-            print("ether >>", session['pEthHoldings'])
 
 
 
-        allocation = Allocation(session['pMinimumPrice'],session['pMaximumPrice'],session['pEthHoldings'],session['pstEthHoldings'],session['prEthHoldings'],session['pswEthHoldings'],session['pUsdHoldings'])
+        allocation = Allocation(session)
         
-        totalEthHoldingsInEth = allocation.getEthHoldingsInEth()
+        session['totalEthHoldingsInEth'] = allocation.getEthHoldingsInEth()
         
-        usdAllocation = allocation.usdAllocation()
-        ethAllocation = allocation.ethAllocation()
-        currentUsdAllocation = allocation.currentUsdAllocation()
-        currentEthAllocation = allocation.currentEthAllocation()
+        session['currentPerUsdAllocation'] = allocation.currentPerUsdAllocation()
+        session['currentEthAllocation'] = allocation.currentEthAllocation()
+        session['desiredUsdAllocation'] = allocation.desiredUsdAllocation()
+        session['desiredEthAllocation'] = allocation.desiredEthAllocation()
 
-        transferAmount = allocation.transferAmount()
 
-        return render_template('allocation.html',totalEthHoldingsInEth=totalEthHoldingsInEth,
-            usdAllocation=usdAllocation, ethAllocation=ethAllocation,currentEthAllocation=currentEthAllocation,
-            currentUsdAllocation=currentUsdAllocation, transferAmount=transferAmount, session=session)
+        session['transferAmount'] = allocation.transferAmount()
+
+        return render_template('allocation.html', session=session)
     
     return render_template('allocation.html', session=session)
 
@@ -209,5 +207,5 @@ def processAnnuity():
     return render_template('annuity.html', session=session)
 
 if __name__ == '__main__':
-    load_dotenv()
+    load_dotenv(override=True)
     app.run(debug=True)

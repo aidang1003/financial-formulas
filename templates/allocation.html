@@ -87,21 +87,21 @@ block body %}
           step=".00001"
           required
         /><br />
-        {% if totalEthHoldingsInEth %}
-        <h3>Total Eth: {{totalEthHoldingsInEth}}<h3>
+        {% if session.totalEthHoldingsInEth %}
+        <h3>Total Eth: {{session.totalEthHoldingsInEth}}<h3>
         {% endif %}
         <br />
         <input type="submit" value="submit" />
-        {% if currentUsdAllocation and currentEthAllocation and usdAllocation and ethAllocation %}
-        <h4>Current USD Allocation Percentage: {{currentUsdAllocation}}</h4>
-        <h4>Current ETH Allocation Percentage: {{currentEthAllocation}}</h4>
-        <h4>Desired USD Allocation Percentage: {{usdAllocation}}</h4>
-        <h4>Desired ETH Allocation Percentage: {{ethAllocation}}</h4>
-          {% if currentUsdAllocation > usdAllocation%}
-          <h4>Convert {{transferAmount}} to Eth</h4>
+        {% if session.currentPerUsdAllocation and session.currentEthAllocation and session.desiredUsdAllocation and session.desiredUsdAllocation %}
+        <h4>Current USD Allocation Percentage: {{session.currentPerUsdAllocation}}%</h4>
+        <h4>Current ETH Allocation Percentage: {{session.currentEthAllocation}}%</h4>
+        <h4>Desired USD Allocation Percentage: {{session.desiredUsdAllocation}}%</h4>
+        <h4>Desired ETH Allocation Percentage: {{session.desiredEthAllocation}}%</h4>
+          {% if session.currentPerUsdAllocation > session.desiredUsdAllocation %}
+          <h4>Convert ${{session.transferAmount}} to Eth</h4>
           {% endif %}
-          {% if currentUsdAllocation < usdAllocation%}
-          <h4>Convert {{transferAmount}} in ETH to USD</h4>
+          {% if session.currentPerUsdAllocation < session.desiredUsdAllocation %}
+          <h4>Convert ${{session.transferAmount}} in ETH to USD</h4>
           {% endif %}
         {% endif %}
       </form>
