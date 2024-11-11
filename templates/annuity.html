@@ -9,44 +9,56 @@ body %}
     <head>
       Present and Future Values of an Annuity</head
     ><br /><br />
-    <input type="radio" id="pvAnnuity" name="annuity_type" value="pvAnnuity" />
-    <label for="pvAnnuity">Present Value of an Annuity</label><br />
-    <input type="radio" id="fvAnnuity" name="annuity_type" value="fvAnnuity" />
-    <label for="fvAnnuity">Future Value of an Annuity</label><br />
-    <label for="fPeriodicPayment">Periodic Payment:</label><br />
+    <input
+      type="radio"
+      id="fAnnuityType"
+      name="fAnnuityType"
+      value="1"
+      required
+    />
+    <label for="fAnnuityType">Present Value of an Annuity</label><br />
+    <input
+      type="radio"
+      id="fAnnuityType"
+      name="fAnnuityType"
+      value="-1"
+      required
+    />
+    <label for="fAnnuityType">Future Value of an Annuity</label><br />
+    <label for="PeriodicPayment">Periodic Payment:</label><br />
     <input
       type="number"
       placeholder="1000"
-      value="1000"
-      id="fPeriodicPayment"
+      value="{{session.periodicPayment}}"
+      id="PeriodicPayment"
       name="fPeriodicPayment"
       required
     /><br />
-    <label for="fRatePerPeriod">Rate Per Period:</label><br />
+    <label for="RatePerPeriod">Rate Per Period:</label><br />
     <input
       type="number"
       placeholder=".02"
-      value=".02"
-      id="fRatePerPeriod"
+      value="{{session.ratePerPeriod}}"
+      id="RatePerPeriod"
       name="fRatePerPeriod"
       min="0"
       step=".01"
       required
     /><br />
-    <label for="fPeriods">Number of Periods:</label><br />
+    <label for="Periods">Number of Periods:</label><br />
     <input
       type="number"
       placeholder="5"
-      value="5"
-      id="fPeriods"
+      value="{{session.periods}}"
+      id="Periods"
       name="fPeriods"
       min="0"
       required
     /><br />
     <br />
     <input type="submit" value="submit" />
-    {% if annuity %}
-    <h3>Value of Annuity: {{annuity}}</h3>
+    {% if session.annuity %}
+    <h3>Value of Annuity: ${{session.annuity}}</h3>
     {% endif %}
   </form>
 </div>

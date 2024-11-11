@@ -8,20 +8,59 @@ app = Flask(__name__)
 
 app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY') #set a secret key to use for session instance
 
-class Finance():
-    def __init__(self, annuityType, periodicPayment, ratePerPeriod, periods):
-        self.annuityType = annuityType
-        self.periodicPayment = periodicPayment
-        self.ratePerPeriod = ratePerPeriod
-        self.periods = periods        
+@app.route('/')
+def index():
+    return render_template('index.html', pageTitle='Homepage', session=session)
+
+@app.route('/index')
+def home():
+    return render_template('index.html', session=session)
+
+
+class Annuity():
+    def __init__(self, arrData):
+        if arrData['annuityType'] == 0:
+            arrData['annuityType'] = 1
+        self.annuityType = arrData['annuityType']
+        self.periodicPayment = arrData['periodicPayment']
+        self.ratePerPeriod = arrData['ratePerPeriod']
+        self.periods = arrData['periods']     
 
     def annuity(self):
-        if self.annuityType == "fvAnnuity":
-            return f'${round(self.periodicPayment * ((((1+self.ratePerPeriod) ** self.periods) - 1) / self.ratePerPeriod) , 2)}'
-        elif self.annuityType == "pvAnnuity":
-            return f'${round(self.periodicPayment * ((1-(1+self.ratePerPeriod) ** (-1 * self.periods)) / self.ratePerPeriod) , 2)}'
+        if self.annuityType == -1:
+            return round(self.periodicPayment * ((((1+self.ratePerPeriod) ** self.periods) - 1) / self.ratePerPeriod) , 2)
+        elif self.annuityType == 1:
+            return round(self.periodicPayment * ((1-(1+self.ratePerPeriod) ** (-1 * self.periods)) / self.ratePerPeriod) , 2)
         else:
             return "Error in annuity function. Likely there was not a correct annuity type supplied"
+
+
+
+@app.route('/annuity', methods=["GET","POST"])
+def processAnnuity():
+    if request.method == "GET":
+        if session['annuityType'] and session['periodicPayment'] and session['ratePerPeriod'] and session['periods']:
+            pass
+        else:
+            session['annuityType'] = 1
+            session['periodicPayment'] = 1000
+            session['ratePerPeriod'] = .02
+            session['periods'] = 5
+
+
+
+    if request.method == "POST":
+        form = request.form
+        session['annuityType'] = float(form['fAnnuityType'])
+        session['periodicPayment'] = float(form['fPeriodicPayment'])
+        session['ratePerPeriod'] = float(form['fRatePerPeriod'])
+        session['periods'] = float(form['fPeriods'])
+
+        annuity = Annuity(session)
+        
+        session['annuity'] = annuity.annuity()
+
+    return render_template('annuity.html', session=session)
 
 class Bond():
     def __init__(self, arrData, rateOfYield=.07):
@@ -34,20 +73,17 @@ class Bond():
     def bondEquivalentYield(self):
         return f'{round(100 * ((self.faceValue - self.purchasePrice) / self.purchasePrice) * (1 / self.yearsToMaturity), 4)}%'
     
-@app.route('/bond')
-def bond():
-    if not "faceValue" in session.keys():
-        print("don't go here")
-        session["faceValue"] = None
-    if session["faceValue"] in session:
-        session["purchasePrice"] = None
-    if session["faceValue"] in session:
-        session["daysToMaturity"] = None
-    return render_template('bond.html', session=session)
-
 
 @app.route('/bond', methods=["GET","POST"])
-def bondEquivalentYield():
+def bond():
+    if request.method =='GET':
+        if session["faceValue"] and session["purchasePrice"] and session["daysToMaturity"]:
+            pass
+        else:
+            session["faceValue"] = 1000
+            session["purchasePrice"] = 980
+            session["daysToMaturity"] = 60
+
     if request.method == "POST":
         form = request.form
         session["faceValue"] = float(form['FaceValue'])
@@ -114,43 +150,27 @@ class Allocation():
             return round(result,3)
         
         def getEthHoldingsInEth(self):
-            return self.totalEthHoldingsInUsd / self.ethPrice
+            return round(self.totalEthHoldingsInUsd / self.ethPrice, 4)
         
         def transferAmount(self):
             difference = self.currentPerUsdAllocation - self.desiredUsdAllocation
             differenceInUsd = difference * (self.totalEthHoldingsInUsd + self.usdHoldings)
-            return round(differenceInUsd,2)
-
-
-
-@app.route('/')
-def index():
-    return render_template('index.html', pageTitle='Homepage', session=session)
-
-@app.route('/index')
-def home():
-    return render_template('index.html', session=session)
-
-@app.route('/annuity')
-def annuity():
-    return render_template('annuity.html', session=session)
-
-
-
-@app.route('/allocation')
-def allocation():
-    session['pMinimumPrice'] = 0
-    session['pMaximumPrice'] = 12500
-    session['pUsdHoldings'] = 1000
-    session['pEthHoldings'] = 10
-    session['pstEthHoldings'] = 10
-    session['prEthHoldings'] = 10
-    session['pswEthHoldings'] = 10
-    return render_template('allocation.html', session=session)
+            return abs(round(differenceInUsd,2))
 
 @app.route('/allocation', methods=["GET","POST"])
-def allocationPercentage():
-    
+def allocation():
+    if request.method == "GET":
+        if session['pMinimumPrice'] and session['pMaximumPrice'] and session['pUsdHoldings'] and session['pEthHoldings'] and session['pstEthHoldings'] and session['prEthHoldings'] and session['pswEthHoldings']:
+            pass
+        else:
+            session['pMinimumPrice'] = 0
+            session['pMaximumPrice'] = 12500
+            session['pUsdHoldings'] = 1000
+            session['pEthHoldings'] = 10
+            session['pstEthHoldings'] = 10
+            session['prEthHoldings'] = 10
+            session['pswEthHoldings'] = 10
+
     if request.method == "POST":
         form = request.form
         session['pMinimumPrice'] = float(form['fMinimumPrice'])
@@ -170,41 +190,22 @@ def allocationPercentage():
             session['prEthHoldings'] = float(os.getenv('RETH_HOLDINGS'))
             session['pswEthHoldings'] = float(os.getenv('SWETH_HOLDINGS'))
 
-
-
+        # Create Allocation object
         allocation = Allocation(session)
         
+        # Set total eth holdings
         session['totalEthHoldingsInEth'] = allocation.getEthHoldingsInEth()
         
+        # Set desired and current allocation percentages
         session['currentPerUsdAllocation'] = allocation.currentPerUsdAllocation()
         session['currentEthAllocation'] = allocation.currentEthAllocation()
         session['desiredUsdAllocation'] = allocation.desiredUsdAllocation()
         session['desiredEthAllocation'] = allocation.desiredEthAllocation()
 
-
+        # Amount to convert
         session['transferAmount'] = allocation.transferAmount()
-
-        return render_template('allocation.html', session=session)
     
     return render_template('allocation.html', session=session)
-
-@app.route('/annuity', methods=["GET","POST"])
-def processAnnuity():
-    
-    if request.method == "POST":
-        form = request.form
-        pAnnuity = form['annuity_type']
-        pPeriodicPayment = float(form['fPeriodicPayment'])
-        pRatePerPeriod = float(form['fRatePerPeriod'])
-        pPeriods = float(form['fPeriods'])
-
-        finance = Finance(pAnnuity, pPeriodicPayment, pRatePerPeriod, pPeriods)
-        
-        annuity = finance.annuity()
-
-        return render_template('annuity.html', annuity=annuity, session=session)
-
-    return render_template('annuity.html', session=session)
 
 if __name__ == '__main__':
     load_dotenv(override=True)
