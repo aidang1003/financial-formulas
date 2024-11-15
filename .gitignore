@@ -11,6 +11,7 @@ instancce/*
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 #Excel files containing data
 *.xlsx
@@ -20,3 +21,16 @@ __pycache__/
 
 #Temp data file for formatting
 data.py
+
+#Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+#Build
+dist/
+build/
+*.egg-info/
+
+#Other File types
+*.xlsx

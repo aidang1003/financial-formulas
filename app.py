@@ -51,7 +51,7 @@ def annuity():
     if request.method == "POST":
         form = request.form
         session['annuityType'] = form['AnnuityType']
-        session['periodicPayment'] = 1000#float(form['PeriodicPayment'])
+        session['periodicPayment'] = float(form['PeriodicPayment'])
         session['ratePerPeriod'] = float(form['RatePerPeriod'])
         session['periods'] = float(form['Periods'])
 
