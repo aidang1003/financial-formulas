@@ -39,15 +39,14 @@ class Annuity():
 @app.route('/annuity', methods=["GET","POST"])
 def processAnnuity():
     if request.method == "GET":
-        if session['annuityType'] and session['periodicPayment'] and session['ratePerPeriod'] and session['periods']:
-            pass
-        else:
-            session['annuityType'] = 1
-            session['periodicPayment'] = 1000
-            session['ratePerPeriod'] = .02
-            session['periods'] = 5
-
-
+        if 'annuityType' not in session:
+            session["annuityType"] = request.args.get('annuityType', default=1, type=float)
+        if 'periodicPayment' not in session:
+            session["periodicPayment"] = request.args.get('periodicPayment', default=1000, type=float)
+        if 'ratePerPeriod' not in session:
+            session["ratePerPeriod"] = request.args.get('ratePerPeriod', default=.02, type=float)
+        if 'periods' not in session:
+            session["periods"] = request.args.get('periods', default=5, type=float)
 
     if request.method == "POST":
         form = request.form
@@ -77,12 +76,14 @@ class Bond():
 @app.route('/bond', methods=["GET","POST"])
 def bond():
     if request.method =='GET':
-        if session["faceValue"] and session["purchasePrice"] and session["daysToMaturity"]:
-            pass
-        else:
-            session["faceValue"] = 1000
-            session["purchasePrice"] = 980
-            session["daysToMaturity"] = 60
+        if 'faceValue' not in session:
+            session["faceValue"] = request.args.get('faceValue', default=1000, type=float)
+        if 'purchasePrice' not in session:
+            session["purchasePrice"] = request.args.get('purchasePrice', default=980, type=float)
+        if 'daysToMaturity' not in session:
+            session["daysToMaturity"] = request.args.get('daysToMaturity', default=60, type=float)
+
+
 
     if request.method == "POST":
         form = request.form
@@ -160,16 +161,21 @@ class Allocation():
 @app.route('/allocation', methods=["GET","POST"])
 def allocation():
     if request.method == "GET":
-        if session['pMinimumPrice'] and session['pMaximumPrice'] and session['pUsdHoldings'] and session['pEthHoldings'] and session['pstEthHoldings'] and session['prEthHoldings'] and session['pswEthHoldings']:
-            pass
-        else:
-            session['pMinimumPrice'] = 0
-            session['pMaximumPrice'] = 12500
-            session['pUsdHoldings'] = 1000
-            session['pEthHoldings'] = 10
-            session['pstEthHoldings'] = 10
-            session['prEthHoldings'] = 10
-            session['pswEthHoldings'] = 10
+        if 'pMinimumPrice' not in session:
+            session["pMinimumPrice"] = request.args.get('pMinimumPrice', default=0, type=float)
+        if 'pMaximumPrice' not in session:
+            session["pMaximumPrice"] = request.args.get('pMaximumPrice', default=12500, type=float)
+        if 'pUsdHoldings' not in session:
+            session["pUsdHoldings"] = request.args.get('pUsdHoldings', default=10000, type=float)
+        if 'pEthHoldings' not in session:
+            session["pEthHoldings"] = request.args.get('pEthHoldings', default=10, type=float)
+        if 'pstEthHoldings' not in session:
+            session["pstEthHoldings"] = request.args.get('pstEthHoldings', default=10, type=float)
+        if 'prEthHoldings' not in session:
+            session["prEthHoldings"] = request.args.get('prEthHoldings', default=10, type=float)
+        if 'pswEthHoldings' not in session:
+            session["pswEthHoldings"] = request.args.get('pswEthHoldings', default=10, type=float)
+
 
     if request.method == "POST":
         form = request.form
@@ -183,7 +189,7 @@ def allocation():
         session['prEthHoldings'] = float(form['frEthHoldings'])
         session['pswEthHoldings'] = float(form['fswEthHoldings'])
 
-        if 1==0: #Used for debugging, comment this out for the page to run normally
+        if 1==1: #Used for debugging, comment this out for the page to run normally
             session['pUsdHoldings'] = float(os.getenv('COINBASE_USD_HOLDINGS')) + float(os.getenv('GMX_USD_HOLDINGS'))
             session['pEthHoldings'] = float(os.getenv('ETH_HOLDINGS')) + float(os.getenv('GMX_WETH_HOLDINGS'))
             session['pstEthHoldings'] = float(os.getenv('STETH_HOLDINGS'))
