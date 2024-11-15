@@ -19,17 +19,17 @@ def home():
 
 class Annuity():
     def __init__(self, arrData):
-        if arrData['annuityType'] == 0:
-            arrData['annuityType'] = 1
+        if arrData['annuityType'] == '':
+            arrData['annuityType'] = 'PV'
         self.annuityType = arrData['annuityType']
         self.periodicPayment = arrData['periodicPayment']
         self.ratePerPeriod = arrData['ratePerPeriod']
         self.periods = arrData['periods']     
 
-    def annuity(self):
-        if self.annuityType == -1:
+    def fvOrPvOfAnnuity(self):
+        if self.annuityType == 'FV': # Calculates the Future Value of an annuity
             return round(self.periodicPayment * ((((1+self.ratePerPeriod) ** self.periods) - 1) / self.ratePerPeriod) , 2)
-        elif self.annuityType == 1:
+        elif self.annuityType == 'PV': # Calculatesthe Present Value of an annuity
             return round(self.periodicPayment * ((1-(1+self.ratePerPeriod) ** (-1 * self.periods)) / self.ratePerPeriod) , 2)
         else:
             return "Error in annuity function. Likely there was not a correct annuity type supplied"
@@ -37,10 +37,10 @@ class Annuity():
 
 
 @app.route('/annuity', methods=["GET","POST"])
-def processAnnuity():
+def annuity():
     if request.method == "GET":
         if 'annuityType' not in session:
-            session["annuityType"] = request.args.get('annuityType', default=1, type=float)
+            session["annuityType"] = request.args.get('annuityType', default='PV')
         if 'periodicPayment' not in session:
             session["periodicPayment"] = request.args.get('periodicPayment', default=1000, type=float)
         if 'ratePerPeriod' not in session:
@@ -50,14 +50,14 @@ def processAnnuity():
 
     if request.method == "POST":
         form = request.form
-        session['annuityType'] = float(form['fAnnuityType'])
-        session['periodicPayment'] = float(form['fPeriodicPayment'])
-        session['ratePerPeriod'] = float(form['fRatePerPeriod'])
-        session['periods'] = float(form['fPeriods'])
+        session['annuityType'] = form['AnnuityType']
+        session['periodicPayment'] = 1000#float(form['PeriodicPayment'])
+        session['ratePerPeriod'] = float(form['RatePerPeriod'])
+        session['periods'] = float(form['Periods'])
 
         annuity = Annuity(session)
         
-        session['annuity'] = annuity.annuity()
+        session['annuity'] = annuity.fvOrPvOfAnnuity()
 
     return render_template('annuity.html', session=session)
 

@@ -9,51 +9,38 @@ body %}
     <head>
       Present and Future Values of an Annuity</head
     ><br /><br />
-    <input
-      type="radio"
-      id="fAnnuityType"
-      name="fAnnuityType"
-      value="1"
-      required
-    />
-    <label for="fAnnuityType">Present Value of an Annuity</label><br />
-    <input
-      type="radio"
-      id="fAnnuityType"
-      name="fAnnuityType"
-      value="-1"
-      required
-    />
-    <label for="fAnnuityType">Future Value of an Annuity</label><br />
+    <input type="radio" id="AnnuityType" name="AnnuityType" value="PV" {% if
+    session.get('annuityType') == 'PV' %} checked {% endif %}/>
+    <label for="AnnuityType">Present Value of an Annuity</label><br />
+    <input type="radio" id="AnnuityType" name="AnnuityType" value="FV" {% if
+    session.get('annuityType') == 'FV' %} checked {% endif %}/>
+    <label for="AnnuityType">Future Value of an Annuity</label><br />
     <label for="PeriodicPayment">Periodic Payment:</label><br />
     <input
       type="number"
       placeholder="1000"
-      value="{{session.periodicPayment}}"
+      value="{{session.get(periodicPayment)}}"
       id="PeriodicPayment"
-      name="fPeriodicPayment"
-      required
+      name="PeriodicPayment"
     /><br />
     <label for="RatePerPeriod">Rate Per Period:</label><br />
     <input
       type="number"
       placeholder=".02"
-      value="{{session.ratePerPeriod}}"
+      value="{{session.get('ratePerPeriod')}}"
       id="RatePerPeriod"
-      name="fRatePerPeriod"
+      name="RatePerPeriod"
       min="0"
       step=".01"
-      required
     /><br />
     <label for="Periods">Number of Periods:</label><br />
     <input
       type="number"
       placeholder="5"
-      value="{{session.periods}}"
+      value="{{session.get('periods')}}"
       id="Periods"
-      name="fPeriods"
+      name="Periods"
       min="0"
-      required
     /><br />
     <br />
     <input type="submit" value="submit" />
