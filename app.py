@@ -29,7 +29,7 @@ class Annuity():
     def fvOrPvOfAnnuity(self):
         if self.annuityType == 'FV': # Calculates the Future Value of an annuity
             return round(self.periodicPayment * ((((1+self.ratePerPeriod) ** self.periods) - 1) / self.ratePerPeriod) , 2)
-        elif self.annuityType == 'PV': # Calculatesthe Present Value of an annuity
+        elif self.annuityType == 'PV': # Calculates the Present Value of an annuity
             return round(self.periodicPayment * ((1-(1+self.ratePerPeriod) ** (-1 * self.periods)) / self.ratePerPeriod) , 2)
         else:
             return "Error in annuity function. Likely there was not a correct annuity type supplied"
