@@ -1,4 +1,6 @@
+import functools
 from flask import Blueprint, Flask, render_template, url_for, session, request
+from werkzeug.security import check_password_hash, generate_password_hash
 
 annuity_bp = Blueprint("annuity", __name__)
 
