@@ -1,6 +1,5 @@
 from flask import Blueprint, Flask, render_template, url_for, session, request
-from liveprice import PriceData
-from dotenv import load_dotenv
+from finance.liveprice import PriceData
 import os
     
 allocation_bp = Blueprint("allocation", __name__)
@@ -37,8 +36,8 @@ def allocation():
         session['pswEthHoldings'] = float(form['fswEthHoldings'])
 
         if 1==1: #Used for debugging, comment this out for the page to run normally
-            session['pUsdHoldings'] = float(os.getenv('COINBASE_USD_HOLDINGS')) + float(os.getenv('GMX_USD_HOLDINGS'))
-            session['pEthHoldings'] = float(os.getenv('ETH_HOLDINGS')) + float(os.getenv('GMX_WETH_HOLDINGS'))
+            session['pUsdHoldings'] = float(os.getenv('USD_HOLDINGS'))
+            session['pEthHoldings'] = float(os.getenv('ETH_HOLDINGS'))
             session['pstEthHoldings'] = float(os.getenv('STETH_HOLDINGS'))
             session['prEthHoldings'] = float(os.getenv('RETH_HOLDINGS'))
             session['pswEthHoldings'] = float(os.getenv('SWETH_HOLDINGS'))

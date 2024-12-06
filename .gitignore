@@ -2,9 +2,10 @@
 venv/
 
 #Flask
-instancce/*
+instance/*
 !instance/.gitignore
 .webassets-cache
+*.sqlite
 
 #Flask.Python Stack
 #Byte-compiled / optimized / DLL files
