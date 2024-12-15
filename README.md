@@ -1,6 +1,7 @@
-# Flask Template
+# Financial Formulas
+---
 
-Basic structure for starting a Flask project with Jinja templates
+## Basic structure for starting a Flask project with Jinja templates
 
 1. Clone this repository to local computer
 
@@ -22,7 +23,7 @@ Basic structure for starting a Flask project with Jinja templates
 
 ---
 
-# Manage Git in the command line
+## Manage Git in the command line
 
 1. Make a new repository by running `git init` in the folder.
 
@@ -38,7 +39,7 @@ Basic structure for starting a Flask project with Jinja templates
 
 ---
 
-# Manage Dependencies
+## Manage Dependencies
 
 Install the dependencies `pip install -r requirements.txt`
 
@@ -48,7 +49,7 @@ Add dependencies to the requirements.txt: `pip freeze > requirements.txt`
 
 ---
 
-# Manage CoinMarketCap API
+## Manage CoinMarketCap API
 
 1. Create an API key at https://coinmarketcap.com/api/
 
@@ -58,7 +59,7 @@ Add dependencies to the requirements.txt: `pip freeze > requirements.txt`
 
 ---
 
-# Usefule Testing Commands
+## Usefule Testing Commands
 
 1. `pytest` to initiate the test
 2. `coverage run -m pytest` measures the coverage of the tests
@@ -67,7 +68,7 @@ Add dependencies to the requirements.txt: `pip freeze > requirements.txt`
 
 ---
 
-# Deploy To a Server
+## Deploy To a Server
 
 1. `py -m build --wheel`
 
@@ -78,3 +79,11 @@ Add dependencies to the requirements.txt: `pip freeze > requirements.txt`
 4. `pip install waitress`
 
 5. `waitress-serve --call 'flaskapp:create_app'`
+
+---
+
+## Automatic Allocation #TODO
+1) Deposit to Aave
+2) Withdraw from Aave
+3) Transfer on Uniswap, matcha, or 0x?
+4) Integrarte Metamask
