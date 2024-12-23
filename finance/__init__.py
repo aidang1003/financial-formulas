@@ -36,6 +36,9 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
+    from . import auth
+    app.register_blueprint(auth.auth_bp)
+
     from . import annuity
     app.register_blueprint(annuity.annuity_bp)
 

@@ -1,53 +1,57 @@
 {% extends 'base.html' %} {% block title %} Annuities {% endblock%} {% block
 body %}
-<div class="content-header">
-  <h2 class="form-header">Welcome to the annuities page!</h2>
+<div class="content-centered">
+  <h2>Welcome to the annuities page!</h2>
 </div>
 
-<div class="content">
-  <form action="/annuity" method="POST">
-    <head>
-      Present and Future Values of an Annuity</head
-    ><br /><br />
-    <input type="radio" id="AnnuityType" name="AnnuityType" value="PV" {% if
-    session.get('annuityType') == 'PV' %} checked {% endif %}/>
-    <label for="AnnuityType">Present Value of an Annuity</label><br />
-    <input type="radio" id="AnnuityType" name="AnnuityType" value="FV" {% if
-    session.get('annuityType') == 'FV' %} checked {% endif %}/>
-    <label for="AnnuityType">Future Value of an Annuity</label><br />
-    <label for="PeriodicPayment">Periodic Payment:</label><br />
-    <input
-      type="number"
-      placeholder="1000"
-      value="{{session.get(periodicPayment)}}"
-      id="PeriodicPayment"
-      name="PeriodicPayment"
-    /><br />
-    <label for="RatePerPeriod">Rate Per Period:</label><br />
-    <input
-      type="number"
-      placeholder=".02"
-      value="{{session.get('ratePerPeriod')}}"
-      id="RatePerPeriod"
-      name="RatePerPeriod"
-      min="0"
-      step=".01"
-    /><br />
-    <label for="Periods">Number of Periods:</label><br />
-    <input
-      type="number"
-      placeholder="5"
-      value="{{session.get('periods')}}"
-      id="Periods"
-      name="Periods"
-      min="0"
-    /><br />
-    <br />
-    <input type="submit" value="submit" />
-    {% if session.annuity %}
-    <h3>Value of Annuity: ${{session.annuity}}</h3>
-    {% endif %}
-  </form>
+<div class="container">
+  <div class="row">
+    <div class="column">
+      <form action="/annuity" method="POST">
+        <head>
+          Present and Future Values of an Annuity</head
+        ><br /><br />
+        <input type="radio" id="AnnuityType" name="AnnuityType" value="PV" {% if
+        session.get('annuityType') == 'PV' %} checked {% endif %}/>
+        <label for="AnnuityType">Present Value of an Annuity</label><br />
+        <input type="radio" id="AnnuityType" name="AnnuityType" value="FV" {% if
+        session.get('annuityType') == 'FV' %} checked {% endif %}/>
+        <label for="AnnuityType">Future Value of an Annuity</label><br />
+        <label for="PeriodicPayment">Periodic Payment:</label><br />
+        <input
+          type="number"
+          placeholder="1000"
+          value="{{session.get(periodicPayment)}}"
+          id="PeriodicPayment"
+          name="PeriodicPayment"
+        /><br />
+        <label for="RatePerPeriod">Rate Per Period:</label><br />
+        <input
+          type="number"
+          placeholder=".02"
+          value="{{session.get('ratePerPeriod')}}"
+          id="RatePerPeriod"
+          name="RatePerPeriod"
+          min="0"
+          step=".01"
+        /><br />
+        <label for="Periods">Number of Periods:</label><br />
+        <input
+          type="number"
+          placeholder="5"
+          value="{{session.get('periods')}}"
+          id="Periods"
+          name="Periods"
+          min="0"
+        /><br />
+        <br />
+        <input type="submit" value="submit" />
+        {% if session.annuity %}
+        <h3>Value of Annuity: ${{session.annuity}}</h3>
+        {% endif %}
+      </form>
+    </div>
+  </div>
 </div>
 
 {% endblock %}
