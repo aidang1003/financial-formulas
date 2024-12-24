@@ -1,0 +1,23 @@
+{% extends 'base.html' %} 
+    {% block title %} Login {% endblock %} 
+{% block body%}
+<div class="content-centered">
+    <h2>Login with your wallet address</h2>
+</div>
+
+<div class="contrainer">
+    <div class="row">
+        <div class="column">
+            <form method="post">
+                <label for="username">Username</label>
+                <input name="username" id="username" required />
+                <input type="submit" value="Login" />
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+    

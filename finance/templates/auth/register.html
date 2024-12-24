@@ -1,0 +1,23 @@
+{% extends 'base.html' %} 
+    {% block title %} Register {% endblock %} 
+{% block body%}
+<div class="content-centered">
+    <h2>Register your wallet address</h2>
+</div>
+
+<div class="contrainer">
+    <div class="row">
+        <div class="column">
+            <form method="post">
+                <label for="username">Username</label>
+                <input name="username" id="username" required />
+                <input type="submit" value="Register" />
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+    
