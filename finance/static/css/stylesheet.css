@@ -120,3 +120,31 @@ input.danger {
 input[type="submit"] {
   align-self: start;
 }
+
+header.login{
+  text-align: right;
+  min-width: 2em;
+  width: 80%;
+  padding: 6px;
+  text-shadow: 2px;
+}
+
+
+.auth-link {
+  color: #007bff; 
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.auth-link:hover { 
+  text-decoration: underline; 
+}
+
+span.authenticated {
+  color: #007bff; 
+  text-decoration: none;
+  font-weight: bold;
+  padding: 5px 10px;
+}

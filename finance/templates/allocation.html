@@ -41,7 +41,7 @@ block body %}
           id="UsdHoldings"
           name="fUsdHoldings"
           min="0"
-          step="1"
+          step=".01"
           required
         /><br />
         <label for="stEthHoldings">stEth Holdings (in eth):</label><br />
@@ -52,7 +52,7 @@ block body %}
           id="stEthHoldings"
           name="fstEthHoldings"
           min="0"
-          step=".00001"
+          step=".00000000001"
           required
         /><br />
         <label for="rEthHoldings">rEth Holdings (in eth):</label><br />
@@ -63,7 +63,7 @@ block body %}
           id="rEthHoldings"
           name="frEthHoldings"
           min="0"
-          step=".00001"
+          step=".00000000000001"
           required
         /><br />
         <label for="swEthHoldings">swEth Holdings (in eth):</label><br />
@@ -74,7 +74,7 @@ block body %}
           id="swEthHoldings"
           name="fswEthHoldings"
           min="0"
-          step=".00001"
+          step=".000000000000001"
           required
         /><br />
         <label for="EthHoldings">Eth Holdings (in eth):</label><br />
@@ -85,7 +85,7 @@ block body %}
           id="EthHoldings"
           name="fEthHoldings"
           min="0"
-          step=".00001"
+          step=".0000000000000001"
           required
         /><br />
         {% if session.totalEthHoldingsInEth %}
