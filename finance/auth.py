@@ -20,7 +20,6 @@ def register():
         if not walletaddress:
             error = 'Wallet address is required.'
 
-
         if error is None:
             try:
                 db.execute(

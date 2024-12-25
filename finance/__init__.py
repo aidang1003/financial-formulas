@@ -29,10 +29,6 @@ def create_app(test_config=None):
     def index():
         return render_template('index.html', pageTitle='Homepage', session=session)
 
-    @app.route('/index')
-    def home():
-        return render_template('index.html', session=session)
-    
     from . import db
     db.init_app(app)
 
