@@ -107,23 +107,26 @@ block body %}
         {% endif %}
       </form>
     </div>
-      <div class="column">
-        <div class="slidecontainer">
-          <input type="range" min="1" max="13000" value="3000" class="slider" id="myRange">
-          <p>Theoretical Eth Price: <span id="theoreticalEthPrice"></span></p>
-        </div>
-        <script>
-          var slider = document.getElementById("myRange");
-          var output = document.getElementById("theoreticalEthPrice");
-          output.innerHTML = slider.value;
-          
-          slider.oninput = function() {
-            output.innerHTML = this.value;
-          }
-          </script>
-      </div>
+    <div class="column">
+      <form class="slidecontainer" action="/allocation" method="POST">
+        <input type="range" min="1" max="13000" value="3000" class="slider" id="myRange" name="myRange">
+        <p>Theoretical Eth Price: <span id="theoreticalEthPrice"></span></p>
+        <br><br>
+        <button type="submit">Submit</button>
+      </form>
+      <script>
+        var slider = document.getElementById("myRange");
+        var output = document.getElementById("theoreticalEthPrice");
+        output.innerHTML = slider.value;
+        
+        slider.oninput = function() {
+          output.innerHTML = this.value;
+        }
+      </script>
     </div>
   </div>
+</div>
+
 <body>
   {% endblock %}
 </body>

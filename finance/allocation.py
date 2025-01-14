@@ -35,7 +35,11 @@ def allocation():
         session['prEthHoldings'] = float(form['frEthHoldings'])
         session['pswEthHoldings'] = float(form['fswEthHoldings'])
 
-        if 1==1: #Used for debugging, comment this out for the page to run normally
+        # Theoretical eth slider
+        session['myRange'] = float(form['myRange'])
+
+
+        if 1==os.getenv('DEV_MODE'): #Used for debugging, comment this out for the page to run normally
             session['pUsdHoldings'] = float(os.getenv('USD_HOLDINGS'))
             session['pEthHoldings'] = float(os.getenv('ETH_HOLDINGS'))
             session['pstEthHoldings'] = float(os.getenv('STETH_HOLDINGS'))
@@ -74,12 +78,19 @@ class Allocation():
         self.rEthPrice = priceData.getREthPrice()
         self.swEthPrice = priceData.getSwEthPrice()
 
+
         # Calculations
         self.ethHoldings = session['pEthHoldings'] * self.ethPrice
         self.stEthHoldings = session['pstEthHoldings'] * self.stEthPrice
         self.rEthHoldings = session['prEthHoldings'] * self.rEthPrice
         self.swEthHoldings = session['pswEthHoldings'] * self.swEthPrice
         self.totalEthHoldingsInUsd = self.ethHoldings + self.stEthHoldings + self.rEthHoldings +  self.swEthHoldings
+
+        # Set value based on the theoretical eth slider
+        if True:
+            totalEth = self.totalEthHoldingsInUsd / self.ethPrice
+            self.totalEthHoldingsInUsd = totalEth * session['myRange']
+
         self.usdHoldings = session['pUsdHoldings']
         self.factor = factor
 

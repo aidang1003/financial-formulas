@@ -35,3 +35,6 @@ build/
 
 #Other File types
 *.xlsx
+
+#Ignore the captain's log
+Captains Log.txt
