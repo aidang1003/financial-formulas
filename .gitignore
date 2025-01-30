@@ -37,4 +37,4 @@ build/
 *.xlsx
 
 #Ignore the captain's log
-Captains Log.txt
+CaptainsLog.txt

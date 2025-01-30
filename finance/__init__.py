@@ -35,13 +35,16 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.auth_bp)
 
+    from . import allocation
+    app.register_blueprint(allocation.allocation_bp)
+
+    from . import loan
+    app.register_blueprint(loan.loan_bp)
+
     from . import annuity
     app.register_blueprint(annuity.annuity_bp)
 
     from . import bond
     app.register_blueprint(bond.bond_bp)
-
-    from . import allocation
-    app.register_blueprint(allocation.allocation_bp)
 
     return app

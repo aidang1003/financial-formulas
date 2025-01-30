@@ -1,0 +1,69 @@
+{% extends 'base.html' %} {% block title %} Loans {% endblock %} {% block body
+    %}
+    <div class="content-centered">
+      <h2>Welcome to the loans page!</h2>
+    </div>
+    
+    <div class="container">
+      <div class="row">
+        <div class="column">
+          <form action="/loan" method="POST">
+            <head>Calculate loan payment amount</head
+            ><br /><br />
+            <label for="presentValue">Loan Amount:</label><br />
+            <input
+              type="number"
+              value="{{session.presentValue}}"
+              placeholder="50000"
+              id="presentValue"
+              name="presentValue"
+              min="0"
+              step="1"
+              required
+            /><br />
+            <label for="annualRate">Annual Rate:</label><br />
+            <input
+              type="number"
+              value="{{session.annualRate}}"
+              placeholder="980"
+              id="annualRate"
+              name="annualRate"
+              min="0"
+              step=".1"
+              required
+            /><br />
+            <label for="periodsPerYear">Periods in a Year:</label><br />
+            <input
+              type="number"
+              value="{{session.periodsPerYear}}"
+              placeholder="12"
+              id="periodsPerYear"
+              name="periodsPerYear"
+              min="0"
+              step="1"
+              required
+            /><br />
+            <label for="numberOfPeriods">Number of Periods:</label><br />
+            <input
+              type="number"
+              value="{{session.numberOfPeriods}}"
+              placeholder="36"
+              id="numberOfPeriods"
+              name="numberOfPeriods"
+              min="0"
+              step="1"
+              required
+            /><br />
+            <br />
+            <input type="submit" value="submit" />
+            {% if session.loanPayment %}
+            <h4>Loan Payment: {{session.loanPayment}}</h4>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+    <body>
+      {% endblock %}
+    </body>
+    
