@@ -37,7 +37,12 @@ head {
 }
 
 .slidecontainer {
-  width: 100%; /* Width of the outside container */
+  border: 2px solid #000;
+  padding: 25px;
+}
+
+.slider {
+  width: 60%; /* Width of the outside container */
 }
 
 h1 {
