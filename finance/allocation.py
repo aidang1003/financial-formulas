@@ -6,21 +6,20 @@ allocation_bp = Blueprint("allocation", __name__)
 
 @allocation_bp.route('/allocation', methods=["GET","POST"])
 def allocation():
-    if request.method == "GET":
-        if 'pMinimumPrice' not in session:
-            session["pMinimumPrice"] = request.args.get('pMinimumPrice', default=0, type=float)
-        if 'pMaximumPrice' not in session:
-            session["pMaximumPrice"] = request.args.get('pMaximumPrice', default=12500, type=float)
-        if 'pUsdHoldings' not in session:
-            session["pUsdHoldings"] = request.args.get('pUsdHoldings', default=10000, type=float)
-        if 'pEthHoldings' not in session:
-            session["pEthHoldings"] = request.args.get('pEthHoldings', default=10, type=float)
-        if 'pstEthHoldings' not in session:
-            session["pstEthHoldings"] = request.args.get('pstEthHoldings', default=10, type=float)
-        if 'prEthHoldings' not in session:
-            session["prEthHoldings"] = request.args.get('prEthHoldings', default=10, type=float)
-        if 'pswEthHoldings' not in session:
-            session["pswEthHoldings"] = request.args.get('pswEthHoldings', default=10, type=float)
+    if 'pMinimumPrice' not in session:
+        session["pMinimumPrice"] = request.args.get('pMinimumPrice', default=0, type=float)
+    if 'pMaximumPrice' not in session:
+        session["pMaximumPrice"] = request.args.get('pMaximumPrice', default=12500, type=float)
+    if 'pUsdHoldings' not in session:
+        session["pUsdHoldings"] = request.args.get('pUsdHoldings', default=10000, type=float)
+    if 'pEthHoldings' not in session:
+        session["pEthHoldings"] = request.args.get('pEthHoldings', default=10, type=float)
+    if 'pstEthHoldings' not in session:
+        session["pstEthHoldings"] = request.args.get('pstEthHoldings', default=10, type=float)
+    if 'prEthHoldings' not in session:
+        session["prEthHoldings"] = request.args.get('prEthHoldings', default=10, type=float)
+    if 'pswEthHoldings' not in session:
+        session["pswEthHoldings"] = request.args.get('pswEthHoldings', default=10, type=float)
 
 
     if request.method == "POST":
@@ -38,8 +37,7 @@ def allocation():
         # Theoretical eth slider
         session['myRange'] = float(form['myRange'])
 
-
-        if 1==os.getenv('DEV_MODE'): #Used for debugging, comment this out for the page to run normally
+        if float(os.getenv('DEV_MODE')) == 1: #Used for debugging, comment this out for the page to run normally
             session['pUsdHoldings'] = float(os.getenv('USD_HOLDINGS'))
             session['pEthHoldings'] = float(os.getenv('ETH_HOLDINGS'))
             session['pstEthHoldings'] = float(os.getenv('STETH_HOLDINGS'))

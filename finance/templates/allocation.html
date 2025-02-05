@@ -21,6 +21,7 @@
           name="fMinimumPrice"
           min="0"
           step="1"
+          onclick="SelectAll('MinimumPrice');"
           required
         /><br />
         <label for="MaximumPrice">Maximum Price:</label><br />
@@ -32,6 +33,7 @@
           name="fMaximumPrice"
           min="5000"
           step="1"
+          onclick="SelectAll('MaximumPrice');"
           required
         /><br />
         <label for="UsdHoldings">USD Holdings (in dollars):</label><br />
@@ -43,6 +45,7 @@
           name="fUsdHoldings"
           min="0"
           step=".01"
+          onclick="SelectAll('UsdHoldings');"
           required
         /><br />
         <label for="stEthHoldings">stEth Holdings (in eth):</label><br />
@@ -54,6 +57,7 @@
           name="fstEthHoldings"
           min="0"
           step=".00000000001"
+          onclick="SelectAll('stEthHoldings');"
           required
         /><br />
         <label for="rEthHoldings">rEth Holdings (in eth):</label><br />
@@ -65,6 +69,7 @@
           name="frEthHoldings"
           min="0"
           step=".00000000000001"
+          onclick="SelectAll('rEthHoldings');"
           required
         /><br />
         <label for="swEthHoldings">swEth Holdings (in eth):</label><br />
@@ -76,6 +81,7 @@
           name="fswEthHoldings"
           min="0"
           step=".000000000000001"
+          onclick="SelectAll('swEthHoldings');"
           required
         /><br />
         <label for="EthHoldings">Eth Holdings (in eth):</label><br />
@@ -87,12 +93,13 @@
           name="fEthHoldings"
           min="0"
           step=".0000000000000001"
+          onclick="SelectAll('EthHoldings');"
           required
         /><br/>
         <container class="slidecontainer">
           <input class="slider" type="range" min="1" max="13000" value="3000" id="myRange" name="myRange">
           <p class="slider">Theoretical Eth Price: <span id="theoreticalEthPrice"></span></p>
-        </span>
+        </container>
         <input type="submit" value="submit" />
       </form>
     </div>
@@ -124,7 +131,13 @@
   slider.oninput = function() {
     output.innerHTML = this.value;
   }
+
+  function SelectAll(id)
+  {
+      document.getElementById(id).focus();
+      document.getElementById(id).select();
+  }
+
 </script>
-<body>
-  {% endblock %}
-</body>
+
+{% endblock %}
