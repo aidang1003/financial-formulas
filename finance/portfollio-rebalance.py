@@ -1,19 +1,21 @@
 class PortfolioRebalance():
-    def __init__(self, ethAmount, ethPrice, usdAmount, maxPrice, rebalanceSlippage,v=0):
+    def __init__(self, ethAmount, ethPrice, usdAmount, maxPrice, priceChangePercentage, v=0):
+        self.v = v # Turns on verbose mode, only use while debugging
+        if self.v == 1:
+            print("Initiating the portfolio...")
+        
         self.ethAmount = ethAmount # eth amount in eth
         self.ethPrice = ethPrice # eth price in usd
         self.usdAmount = usdAmount # usd amount in usd
         self.maxPrice = maxPrice # Max expected price of eth
-        self.rebalanceSlippage = rebalanceSlippage # The percent slippage at which a rebalance happens automatically
-        self.v = v # Turns on verbose mode, only use while debugging
+        self.priceChangePercentage = priceChangePercentage # The percent slippage at which a rebalance happens automatically, no use for this currently
 
         self.factor = 2 # Factor for calculating re-allocation percentage, 1 is linear and a number greater than 1 means as price gets higher more sales will take place
-        self.totalPortfolioValue = (self.ethAmount * self.ethPrice) + self.usdAmount
         self.calculateAllocationPercentage()
 
 
     def __repr__(self):
-        return f"""Total Portfolio Value: ${round(self.totalPortfolioValue, 2)}
+        return f"""    Total Portfolio Value: ${round(self.totalPortfolioValue, 2)}
     ETH price >> ${round(self.ethPrice, 2)}
     ETH amount in ETH >> {round(self.ethAmount, 9)}
     ETH amount in USD >> ${round(self.ethAmount * self.ethPrice, 2)}
@@ -23,41 +25,46 @@ class PortfolioRebalance():
 
     def rebalanceYesOrNo(self):
         # Returns true when the balance is outside of a given percentage
-        if abs(self.currentPercentage - self.rebalancePercentage) >= self.rebalanceSlippage:
+        if abs(self.currentPercentage - self.rebalancePercentage) > 0:
             if self.v==1:
-                print("Determined there needs to be a rebalance")
+                print("Determined there can be a rebalance")
             return True
         else:
             if self.v==1:
-                print("Determined there does not need to be a rebalance")
+                print("Determined there cannot be a rebalance")
             return False
         
     def calculateAllocationPercentage(self):
         # Calculates the current and desired portfolio allocation percentages
         # Call this after there is a change in either the eth price, eth amount, usd amount, max price (rare), or factor (rare)
-        self.currentPercentage = (self.ethAmount * self.ethPrice) / ((self.ethAmount * self.ethPrice) + self.usdAmount) # Set current ETH/USD ratio
+        self.totalPortfolioValue = ((self.ethAmount * self.ethPrice) + self.usdAmount) # Calculate total portfolio value
+        self.currentPercentage = (self.ethAmount * self.ethPrice) / self.totalPortfolioValue # Set current ETH/USD ratio
         self.rebalancePercentage = 1 - ((1 / (self.maxPrice ** self.factor)) * (self.ethPrice ** self.factor)) # Set desired ETH/USD ratio
         if self.v==1:
-            print("Calculated the current and desired portfolio allocation percentages")
+            print("Calculating portfolio allocation percentages and total value...") # Calculation technically happens before this line
+            print(self)
         return
         
     def portfolioRebalance(self):
         # Function to rebalance the portfolio through the buying/selling of eth
+        if self.v == 1:
+            print(">>> Portfolio state before any rebalancing")
         self.calculateAllocationPercentage()
         if self.rebalanceYesOrNo() == True:
             self.totalPortfolioValue = (self.ethAmount * self.ethPrice) + self.usdAmount
             self.ethAmount = self.totalPortfolioValue * self.rebalancePercentage / self.ethPrice # Calculates amount of eth in the portfolio after any adjustments
             self.usdAmount = self.totalPortfolioValue * (1 - self.rebalancePercentage) # Calculates USD in the portfolio after any adjustments
             
-        
         if self.v==1:
             if self.currentPercentage > self.rebalancePercentage:
-                print(f"Sold {self.totalPortfolioValue * (self.currentPercentage - self.rebalancePercentage)} ETH to balance the portfolio")
+                print(f"Sold {(self.totalPortfolioValue * (self.currentPercentage - self.rebalancePercentage)) / self.ethPrice} ETH to balance the portfolio")
+                self.calculateAllocationPercentage() # Re-caclulate now that the postfolio is balanced, after this runs the current and desired ETH/USD raitos should be the same
             elif self.rebalancePercentage > self.currentPercentage:
-                print(f"Bought {self.totalPortfolioValue * (self.rebalancePercentage - self.currentPercentage)} ETH to balance the portfolio")
+                print(f"Bought ${round(self.totalPortfolioValue * (self.rebalancePercentage - self.currentPercentage), 2)} in ETH to balance the portfolio")
+                self.calculateAllocationPercentage() # Re-caclulate now that the postfolio is balanced, after this runs the current and desired ETH/USD raitos should be the same
             else:
-                print("Current and desired ETH/USD ratio aret the same, no blancing needed")
-        self.calculateAllocationPercentage() # Re-caclulate now that the postfolio is balanced, after this runs the current and desired ETH/USD raitos should be the same
+                print("Current and desired ETH/USD ratio are the same, no blancing needed")
+
         return
 
     def increaseEthPrice(self, priceIncreasePercent=.05):
@@ -74,22 +81,19 @@ class PortfolioRebalance():
             print(f"Decreasing Eth price by {round(priceDecreasePercent * 100, 2)}%")
         return
 
+    def generateAllocationPriceList(self):
+        # Create a 2-D numbered array for prices which rebalncing will take place at
+        self.allocationPriceList = []
+        minPrice = 10 # Hard code minimum price of Eth to $10, any less is irrelevant
+        i = 0
+        while minPrice < self.maxPrice:
+            self.allocationPriceList.append([i,round(minPrice, 2)])
+            minPrice = minPrice * (1 + self.priceChangePercentage)
+            i+=1
+        self.allocationPriceList.append([i,round(self.maxPrice, 2)]) # Add the last value, when price is at max
+        return self.allocationPriceList
 
-class SimulateEthPriceMovement():
-    def allocationLevelsMax(self, maximumAmount):
-        # return allocation levels in a list
-        returnList = []
-        while maximumAmount > 0:
-            returnList.append(round(maximumAmount, 2))
-            maximumAmount = maximumAmount * (1 - self.rebalanceSlippage)
-            if maximumAmount < 100:
-                maximumAmount = 0
-        return returnList
     
 
-portfolio = PortfolioRebalance(10, 3000, 5000, 12500, .03,1)
-print(portfolio)
-portfolio.portfolioRebalance()
-portfolio.increaseEthPrice(.1)
-portfolio.portfolioRebalance()
-print(portfolio)
+portfolio = PortfolioRebalance(10, 3000, 5000, 12500, .03, 1)
+print(portfolio.generateAllocationPriceList())
