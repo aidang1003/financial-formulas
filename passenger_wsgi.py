@@ -1,7 +1,7 @@
 import imp
 import os
 import sys
-from portfolio import create_app
+from finance import create_app
 
 
 wsgi = imp.load_source('wsgi', 'finance/__init__.py')
