@@ -92,6 +92,10 @@ class PortfolioRebalance():
             i+=1
         self.allocationPriceList.append([i,round(self.maxPrice, 2)]) # Add the last value, when price is at max
         return self.allocationPriceList
+    
+    def reAllocateAtALevel(self, level):
+        #TODO: Rebalance when a levre is hit
+        pass
 
     
 

@@ -29,7 +29,7 @@
 
 2. Track all the files in the new local repository `git add .`
 
-3. Make the first commit of this new project `git commit -m 'first commit of <project name> from flask_template`
+3. Make the first commit of this new project `git commit -m 'first commit of <project name> from flask_template'`
 
 4. On Github, create a new repository. _DO NOT_ initialize it
 
